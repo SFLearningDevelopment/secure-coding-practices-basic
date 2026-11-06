@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<!-- build: 2026110601 -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 0 &mdash; Orientation and lab setup | Secure Coding: Basic to Intermediate</title>
+<style>
+:root{
+  --ink:#1B2124; --ink-2:#495259; --rule:#DFE3DE; --paper:#F6F7F5; --panel:#FFFFFF;
+  --level:#1a6eb5; --level-soft:#E8F1FA;
+  --lens:#B0721A; --lens-soft:#FBF4E7;
+  --verify:#41525F; --verify-soft:#EEF2F4;
+  --caution:#9E3025; --caution-soft:#FBEDEB;
+  --ok:#2E6B34; --ok-soft:#E9F2E9;
+  --serif: Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif;
+  --sans: ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono: ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 22px 90px}
+a{color:var(--level);text-decoration-thickness:1px;text-underline-offset:2px}
+.masthead{border-bottom:1px solid var(--rule);background:var(--panel)}
+.masthead .wrap{padding-top:38px;padding-bottom:30px}
+.crumb{font-family:var(--sans);font-size:13px;color:var(--ink-2);margin:0 0 14px}
+.who{float:right;font-size:12.5px;color:var(--ink-2)}
+.back{color:var(--level);text-decoration:none;font-weight:600}
+.back:hover{text-decoration:underline}
+.signout{background:none;border:0;color:var(--level);font-size:12.5px;cursor:pointer;
+  text-decoration:underline;font-family:inherit;padding:0}
+.chip{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.02em;
+  color:#fff;background:var(--level);border-radius:3px;padding:3px 9px;margin-right:8px}
+h1{font-family:var(--sans);font-weight:640;font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.015em}
+.deck{font-size:18px;color:var(--ink-2);margin:0;max-width:64ch}
+.facts{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px;padding-top:18px;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:13.5px;color:var(--ink-2)}
+.facts b{display:block;color:var(--ink);font-weight:600}
+.progress{position:sticky;top:0;z-index:20;background:rgba(246,247,245,.94);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+.progress .wrap{display:flex;align-items:center;gap:14px;padding-top:9px;padding-bottom:9px}
+.bar{flex:1;height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--level);transition:width .25s ease}
+.count{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+h2{font-family:var(--sans);font-weight:640;font-size:22px;line-height:1.25;margin:0;letter-spacing:-.01em}
+h3{font-family:var(--sans);font-weight:620;font-size:16px;margin:26px 0 8px}
+p{margin:0 0 14px;max-width:72ch}
+ul,ol{max-width:72ch;padding-left:22px}
+li{margin-bottom:7px}
+section.stage{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.stage-head{display:flex;gap:16px;align-items:baseline;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:14px;color:var(--level);border:1px solid var(--level);
+  border-radius:50%;width:30px;height:30px;min-width:30px;display:flex;align-items:center;
+  justify-content:center;align-self:flex-start;margin-top:2px}
+.num.ok{background:var(--level);color:#fff}
+.goal{font-family:var(--sans);font-size:14px;color:var(--ink-2);margin:0 0 18px 46px}
+.stage-body{margin-left:46px}
+.callout{border-radius:5px;padding:14px 16px;margin:0 0 16px;font-size:15.5px}
+.callout p{margin:0;max-width:66ch}
+.callout p+p{margin-top:9px}
+.callout ul{margin:6px 0 0;font-size:15px}
+.callout .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;display:block;margin-bottom:5px}
+.lens{background:var(--lens-soft);border-left:3px solid var(--lens)}
+.lens .tag{color:var(--lens)}
+.verify{background:var(--verify-soft);border-left:3px dashed var(--verify)}
+.verify .tag{color:var(--verify)}
+.caution{background:var(--caution-soft);border-left:3px solid var(--caution)}
+.caution .tag{color:var(--caution)}
+.good{background:var(--ok-soft);border-left:3px solid var(--ok)}
+.good .tag{color:var(--ok)}
+.done{background:var(--level-soft);border-radius:5px;padding:16px 18px;margin-top:26px}
+.done .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;color:var(--level);display:block;margin-bottom:8px}
+.done label{display:flex;gap:11px;align-items:flex-start;font-size:15.5px;cursor:pointer;margin:0}
+.done input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.done label.checked{color:var(--ink-2)}
+.done .sync{font-family:var(--sans);font-size:12px;color:var(--ink-2);margin:9px 0 0 27px;min-height:15px}
+.done input:disabled{accent-color:#B9C2BA}
+.done label.locked{color:#8D979C;cursor:not-allowed}
+.orient{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.secdone{display:flex;gap:10px;align-items:center;font-family:var(--sans);font-size:14px;color:var(--ink-2);
+  border-top:1px solid var(--rule);margin-top:22px;padding-top:14px;cursor:pointer}
+.secdone input{accent-color:var(--level);width:16px;height:16px;flex:none}
+.secdone.ticked{color:var(--level);font-weight:600}
+section.stage.check{border-color:#C9DAEA;background:#FCFDFE}
+.gstem{font-weight:600;margin:0 0 12px}
+.gq{margin-bottom:26px}
+.gopt{display:flex;gap:11px;align-items:flex-start;font-size:16px;margin-bottom:8px;cursor:pointer;max-width:72ch}
+.gopt input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.gopt input:disabled+span{color:var(--ink-2)}
+.gfb{margin-top:12px}
+.gfb .callout{margin-bottom:0}
+.gactions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.gstate{font-family:var(--sans);font-size:13px;color:var(--ink-2)}
+button.pbtn{border:0;cursor:pointer;font-family:var(--sans)}
+.recap{font-family:var(--sans);font-size:15px;color:var(--ink-2);border-top:1px solid var(--rule);
+  margin-top:24px;padding-top:16px}
+.recap b{color:var(--ink);font-weight:620}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:34px 0 0;flex-wrap:wrap}
+.pbtn{display:inline-block;background:var(--level);color:#fff;text-decoration:none;
+  font-family:var(--sans);font-size:14.5px;font-weight:600;padding:11px 22px;border-radius:8px}
+.pbtn:hover{filter:brightness(1.08)}
+.pbtn.ghost{background:none;color:var(--level);border:1.5px solid var(--level)}
+.pbtn.off,.pbtn:disabled{background:none;color:#A9B2B6;border:1.5px solid var(--rule);pointer-events:none}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:0 0 16px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-size:13px;font-weight:620}
+td code,li code,p code{font-family:var(--mono);font-size:.86em;background:#EEF2F4;border-radius:3px;padding:1px 5px}
+.fname{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);margin:0 0 4px}
+pre.code{background:#122130;color:#E3EAF1;font-family:var(--mono);font-size:13.5px;line-height:1.55;
+  padding:14px 16px;border-radius:6px;overflow-x:auto;margin:0 0 16px;white-space:pre}
+pre.code .c{color:#8FA3B5}
+pre.term{background:#1B2124;color:#D8E0D9}
+figure{margin:0 0 22px}
+figcaption{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);margin-top:8px}
+svg{width:100%;height:auto;display:block}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding-top:18px;
+  font-family:var(--sans);font-size:12.5px;color:var(--ink-2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:620px){
+  body{font-size:16px}
+  .stage-body,.goal{margin-left:0}
+  .stage-head{gap:12px}
+  section.stage,.orient{padding:20px 18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<style>
+  details.lang{border:1px solid var(--rule);border-radius:6px;margin:0 0 10px;background:var(--panel)}
+  details.lang>summary{cursor:pointer;list-style:none;font-family:var(--sans);font-size:14.5px;font-weight:600;
+    padding:10px 14px;display:flex;align-items:center;gap:10px}
+  details.lang>summary::-webkit-details-marker{display:none}
+  details.lang>summary::before{content:"\25B8";color:var(--level);font-size:13px;width:12px}
+  details.lang[open]>summary::before{content:"\25BE"}
+  details.lang>summary:hover{background:var(--level-soft)}
+  details.lang>.lbody{padding:4px 16px 4px}
+  .langbar{display:flex;gap:10px;font-family:var(--sans);font-size:12.5px;margin:0 0 8px}
+  .langbar button{background:none;border:0;color:var(--level);cursor:pointer;padding:0;text-decoration:underline;font-family:inherit;font-size:inherit}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <p class="crumb"><span id="who" class="who"></span><a class="back" href="index.html?v=2026110601">&#8592; Dashboard</a> &middot; SF Knowledge Hub &middot; Secure Coding: Basic to Intermediate</p>
+    <p><span class="chip">Module 0 of 6</span></p>
+    <h1>Orientation and lab setup</h1>
+    <p class="deck">How the course works, the rules for practising attacks safely and legally, and setting up the practice apps and your programming language on your computer.</p>
+    <div class="facts"><div><b>Time</b>About 2 hours</div><div><b>Sections</b>4, each with a finish box</div><div><b>OWASP</b>Overview of the Top 10:2025</div><div><b>Completion</b>All sections, check questions (70%), then the box at the end</div></div>
+  </div>
+</header>
+
+<div class="progress"><div class="wrap">
+  <div class="bar"><span id="fill"></span></div>
+  <div class="count" id="count">Loading progress&hellip;</div>
+</div></div>
+
+<div class="wrap">
+
+<div class="orient">
+<h2>Before you begin</h2>
+<p>This is the first of seven modules. By the end of the course you will be able to spot the most common weaknesses in web application code, explain which OWASP category each one belongs to, and fix it in the language you work in.</p>
+<p>Each module has four sections. Tick the box at the end of a section when you have finished it. When all four are ticked and you have passed the check questions, you can mark the module complete.</p>
+<p>You need a computer where you can install software. This module walks you through everything else.</p>
+</div>
+
+<section class="stage" id="sec-1">
+  <div class="stage-head"><div class="num" id="num-1">1</div><h2>How this course works</h2></div>
+  <p class="goal">The format of each module, the languages used, and where the OWASP Top 10 fits.</p>
+  <div class="stage-body">
+
+<p>From Module 1 onwards, each module covers one area of secure coding in four steps:</p>
+<ol>
+<li><b>Theory.</b> What the weakness is, how attackers use it, and the recommended practices that prevent it.</li>
+<li><b>OWASP mapping.</b> Which OWASP Top 10:2025 category the weakness belongs to, with the main CWE numbers.</li>
+<li><b>Fixes.</b> The recommended fix, shown as code that has the weakness next to code that does not.</li>
+<li><b>Lab.</b> A practical exercise where you find the weakness in a practice app and fix it.</li>
+</ol>
+<h3>Languages</h3>
+<p>Code examples are given in six languages: Node.js, JavaScript in the browser, TypeScript, Python, Java and C#. Each language has its own block, closed by default. Open the one you work in. You can also open several to compare them.</p>
+<h3>The OWASP Top 10:2025</h3>
+<p>The <b>OWASP Top 10</b> is a list of the ten most serious risks to web applications, published by the Open Worldwide Application Security Project (OWASP). The 2025 edition is the current one. Each category groups several <b>CWEs</b> (Common Weakness Enumeration entries), which are numbered types of software weakness, such as CWE-89 for SQL injection.</p>
+<table>
+<tr><th>Category</th><th>Name</th><th>Covered in</th></tr>
+<tr><td>A01:2025</td><td>Broken Access Control (now includes server-side request forgery)</td><td>Course 1, Module 2</td></tr>
+<tr><td>A02:2025</td><td>Security Misconfiguration</td><td>Course 1, Module 3</td></tr>
+<tr><td>A03:2025</td><td>Software Supply Chain Failures</td><td>Course 2</td></tr>
+<tr><td>A04:2025</td><td>Cryptographic Failures</td><td>Course 1, Module 4</td></tr>
+<tr><td>A05:2025</td><td>Injection (includes cross-site scripting)</td><td>Course 1, Module 5</td></tr>
+<tr><td>A06:2025</td><td>Insecure Design</td><td>Course 1, Module 1 (basics); Course 2 (threat modelling)</td></tr>
+<tr><td>A07:2025</td><td>Authentication Failures</td><td>Course 1, Module 6</td></tr>
+<tr><td>A08:2025</td><td>Software or Data Integrity Failures</td><td>Course 2</td></tr>
+<tr><td>A09:2025</td><td>Logging and Alerting Failures</td><td>Course 2</td></tr>
+<tr><td>A10:2025</td><td>Mishandling of Exceptional Conditions</td><td>Course 2</td></tr>
+</table>
+<p>Course 2 also covers the separate <b>OWASP API Security Top 10</b>, secrets management on GitHub, AWS and Azure, and penetration testing.</p>
+<div class="callout lens"><span class="tag">Good to know</span><p>CWE, CVE and CVSS are easy to mix up. A <b>CWE</b> is a type of weakness. A <b>CVE</b> is one specific weakness found in one specific product. <b>CVSS</b> is a score from 0 to 10 for how serious a CVE is.</p></div>
+    <label class="secdone" id="sd-1"><input type="checkbox" class="sec" data-sec="1" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-2">
+  <div class="stage-head"><div class="num" id="num-2">2</div><h2>Practising safely and legally</h2></div>
+  <p class="goal">What you may test, and how to keep the practice apps away from other people.</p>
+  <div class="stage-body">
+
+<p>In this course you will try real attacks, so that you understand what your code must stop. The same steps used on a system you are not allowed to test can be a criminal offence, for example under India's Information Technology Act, 2000 and similar laws in other countries. It is also against SourceFuse policy.</p>
+<h3>The rules</h3>
+<ul>
+<li><b>Test only what you own or have written permission to test.</b> In this course, that means the practice apps running on your own computer, and your own GitHub, AWS and Azure accounts.</li>
+<li><b>Never test client systems, SourceFuse systems or public websites</b> as part of this course, even test or staging websites, and even to help someone.</li>
+<li><b>Keep the practice apps local.</b> Start them so they listen only on <code>127.0.0.1</code> (your own computer). Never deploy them to a cloud account or a shared server.</li>
+<li><b>Use made-up data.</b> Never put real customer data, real passwords or real access keys into a practice app or a lab.</li>
+<li><b>Stop the apps when you finish.</b> A deliberately insecure app should not run in the background.</li>
+</ul>
+<div class="callout caution"><span class="tag">Watch out</span><p>Using <code>-p 3000:3000</code> with Docker makes the app reachable from every computer on your network, not only yours. Always use <code>-p 127.0.0.1:3000:3000</code>, as shown in this course.</p></div>
+<h3>The practice apps</h3>
+<table>
+<tr><th>App</th><th>What it is</th><th>Used for</th></tr>
+<tr><td>OWASP Juice Shop</td><td>A deliberately insecure online shop, written in Node.js and TypeScript</td><td>Most web application labs in Course 1</td></tr>
+<tr><td>OWASP crAPI</td><td>A deliberately insecure set of APIs for a car-service app</td><td>API security labs (mainly in Course 2)</td></tr>
+</table>
+<p>For the fixing part of each lab, you also work on small code samples in your own language. Those samples run on your computer without containers.</p>
+    <label class="secdone" id="sd-2"><input type="checkbox" class="sec" data-sec="2" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-3">
+  <div class="stage-head"><div class="num" id="num-3">3</div><h2>Choose how to run the practice apps</h2></div>
+  <p class="goal">Install one of four options. Option A suits most people.</p>
+  <div class="stage-body">
+
+<table>
+<tr><th>Option</th><th>What you install</th><th>Runs Juice Shop</th><th>Runs crAPI</th></tr>
+<tr><td>A. Docker</td><td>Docker Desktop (Windows, macOS) or Docker Engine (Linux)</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>B. Podman</td><td>Podman Desktop or Podman, a free tool that runs the same container images</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>C. GitHub Codespaces</td><td>Nothing. Runs in your browser, on GitHub's servers</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>D. Node.js only</td><td>Node.js (no containers)</td><td>Yes</td><td>No</td></tr>
+</table>
+
+<h3>Option A: Docker</h3>
+<p>Install Docker Desktop from <a href="https://docs.docker.com/get-docker/" target="_blank" rel="noopener">docs.docker.com/get-docker</a>. On Linux you can install Docker Engine instead. Check that it works:</p>
+<pre class="code term">docker --version
+docker compose version
+docker run --rm hello-world   <span class="c"># prints "Hello from Docker!"</span></pre>
+<div class="callout lens"><span class="tag">Good to know</span><p>Docker Desktop needs a paid licence in larger companies. Check with your IT team before installing it. If it is not allowed, use Option B, C or D.</p></div>
+
+<h3>Option B: Podman</h3>
+<p>Install Podman Desktop from <a href="https://podman-desktop.io/" target="_blank" rel="noopener">podman-desktop.io</a>, or Podman from your Linux package manager. On Windows and macOS, create and start the Podman machine when the installer asks. Podman uses the same commands as Docker, so wherever this course says <code>docker</code>, you can type <code>podman</code>.</p>
+<pre class="code term">podman --version
+podman run --rm hello-world
+podman compose version        <span class="c"># needed for crAPI</span></pre>
+
+<h3>Option C: GitHub Codespaces</h3>
+<p>A codespace is a computer in the cloud that you use from your browser. Docker is already installed in it.</p>
+<ol>
+<li>Sign in to GitHub with your own account and create a new empty private repository, for example <code>secure-coding-labs</code>.</li>
+<li>On the repository page, select <b>Code</b>, then the <b>Codespaces</b> tab, then <b>Create codespace on main</b>.</li>
+<li>In the terminal of the codespace, run <code>docker run --rm hello-world</code>.</li>
+</ol>
+<p>When an app starts in the codespace, the <b>Ports</b> tab shows a link to open it. Leave the port <b>Private</b>, which is the default, so that only you can open it.</p>
+<div class="callout caution"><span class="tag">Watch out</span><p>Never change a practice app's port to Public. GitHub gives each account a limited number of free hours a month, so stop the codespace when you finish.</p></div>
+
+<h3>Option D: Node.js only (Juice Shop only)</h3>
+<p>Install Node.js (see Section 4). Then download the Juice Shop release for your operating system and Node.js version from <a href="https://github.com/juice-shop/juice-shop/releases" target="_blank" rel="noopener">github.com/juice-shop/juice-shop/releases</a>, unzip it, and start it:</p>
+<pre class="code term">cd juice-shop_<span class="c">&lt;version&gt;</span>
+npm start                     <span class="c"># then open http://localhost:3000</span></pre>
+<p>With this option you cannot run crAPI. You will need Option A, B or C for the API labs.</p>
+    <label class="secdone" id="sd-3"><input type="checkbox" class="sec" data-sec="3" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-4">
+  <div class="stage-head"><div class="num" id="num-4">4</div><h2>Lab: start the practice apps and set up your language</h2></div>
+  <p class="goal">Run Juice Shop and crAPI on your own computer only, and check the tools for the languages you work in.</p>
+  <div class="stage-body">
+
+<h3>1. Start Juice Shop</h3>
+<pre class="code term">docker run --rm -d --name juice-shop -p 127.0.0.1:3000:3000 bkimminich/juice-shop
+docker ps                     <span class="c"># juice-shop shows 127.0.0.1:3000-&gt;3000/tcp</span></pre>
+<p>Open <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a>. You should see the Juice Shop home page with a list of products.</p>
+
+<h3>2. Start crAPI</h3>
+<p>crAPI runs as several containers, started together with Docker Compose. By default it listens only on your own computer.</p>
+<pre class="code term">mkdir crapi &amp;&amp; cd crapi
+curl -o docker-compose.yml https://raw.githubusercontent.com/OWASP/crAPI/main/deploy/docker/docker-compose.yml
+docker compose pull
+docker compose -f docker-compose.yml --compatibility up -d
+docker compose ps             <span class="c"># wait until every service shows "healthy"</span></pre>
+<p>Open <a href="http://localhost:8888" target="_blank" rel="noopener">http://localhost:8888</a> to see the crAPI sign-up page. crAPI sends its emails to a test mailbox at <a href="http://localhost:8025" target="_blank" rel="noopener">http://localhost:8025</a>.</p>
+<div class="callout caution"><span class="tag">Watch out</span><p>Do not set <code>LISTEN_IP=0.0.0.0</code> when you start crAPI. That setting makes it reachable from other computers.</p></div>
+
+<h3>3. Set up the language you work in</h3>
+<p>Set up at least one language. Open the block for each language you want to use.</p>
+<div class="langbar"><button type="button" data-lang="open">Expand all</button><button type="button" data-lang="close">Collapse all</button></div>
+<details class="lang"><summary>Node.js</summary><div class="lbody">
+<p>Install the current LTS release from <a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a>. Version 22 or later is fine. npm is installed with it.</p>
+<pre class="code term">node --version     <span class="c"># v22 or later</span>
+npm --version</pre>
+</div></details>
+<details class="lang"><summary>JavaScript (browser)</summary><div class="lbody">
+<p>You need only a current browser: Chrome, Edge or Firefox. Open the developer tools with <code>F12</code> (or <code>Cmd+Option+I</code> on macOS) and go to the <b>Console</b> tab.</p>
+<pre class="code">console.log("Browser console is ready");</pre>
+<p>Later modules use the <b>Network</b> and <b>Application</b> tabs as well, to look at requests, cookies and storage.</p>
+</div></details>
+<details class="lang"><summary>TypeScript</summary><div class="lbody">
+<p>TypeScript runs on Node.js, so install Node.js first (see the Node.js block). Then create a practice folder:</p>
+<pre class="code term">mkdir sc-ts &amp;&amp; cd sc-ts
+npm init -y
+npm install --save-dev typescript
+npx tsc --version  <span class="c"># Version 5 or later</span></pre>
+</div></details>
+<details class="lang"><summary>Python</summary><div class="lbody">
+<p>Install Python 3.12 or later from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org</a>. Use a virtual environment for each practice folder, so packages stay separate.</p>
+<pre class="code term">python3 --version              <span class="c"># 3.12 or later (on Windows: py --version)</span>
+mkdir sc-py &amp;&amp; cd sc-py
+python3 -m venv .venv
+source .venv/bin/activate      <span class="c"># Windows: .venv\Scripts\activate</span>
+pip --version</pre>
+</div></details>
+<details class="lang"><summary>Java</summary><div class="lbody">
+<p>Install a JDK, version 21 or later. Eclipse Temurin from <a href="https://adoptium.net/" target="_blank" rel="noopener">adoptium.net</a> is free. Later labs use Maven, which you can install from <a href="https://maven.apache.org/install.html" target="_blank" rel="noopener">maven.apache.org</a>.</p>
+<pre class="code term">java -version      <span class="c"># 21 or later</span>
+javac -version
+mvn -version</pre>
+</div></details>
+<details class="lang"><summary>C#</summary><div class="lbody">
+<p>Install the .NET SDK, version 8 or later, from <a href="https://dotnet.microsoft.com/download" target="_blank" rel="noopener">dotnet.microsoft.com/download</a>. Then create and run a small console app:</p>
+<pre class="code term">dotnet --version   <span class="c"># 8 or later</span>
+dotnet new console -o sc-cs
+cd sc-cs
+dotnet run         <span class="c"># prints Hello, World!</span></pre>
+</div></details>
+
+<h3>4. Stop everything</h3>
+<pre class="code term">docker stop juice-shop
+cd crapi &amp;&amp; docker compose down</pre>
+<p>Start them again in the same way at the start of each lab.</p>
+<div class="callout verify"><span class="tag">Check your work</span><ul><li><code>docker ps</code> showed Juice Shop on <code>127.0.0.1:3000</code>, not <code>0.0.0.0:3000</code></li><li>The Juice Shop home page and the crAPI sign-up page both opened in your browser</li><li>The version check for at least one language printed the expected version</li><li>Both apps are stopped</li></ul></div>
+    <label class="secdone" id="sd-4"><input type="checkbox" class="sec" data-sec="4" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage check">
+  <div class="stage-head"><div class="num">?</div><h2>Check your understanding</h2></div>
+  <p class="goal">Answer at least 4 of the 5 questions correctly (70%) to unlock the completion box. You can try as many times as you need.</p>
+  <div class="stage-body">
+    <div class="gq" data-i="0">
+      <p class="gstem">1. You start the practice app and find that colleagues on the office network can open it from their computers. What should you do?</p>
+      <label class="gopt"><input type="radio" name="g0" value="0"> <span>Leave it running, because only colleagues can reach it</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="1"> <span>Stop it, then start it again so it listens only on 127.0.0.1</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="2"> <span>Add a password to the office Wi-Fi</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="3"> <span>Tell colleagues not to open it</span></label>
+      <div class="gfb" id="gfb-0"></div>
+    </div>
+    <div class="gq" data-i="1">
+      <p class="gstem">2. Which of these is allowed during this course?</p>
+      <label class="gopt"><input type="radio" name="g1" value="0"> <span>Trying an attack from the course on a client&#x27;s test website, because it is only a test website</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="1"> <span>Checking a colleague&#x27;s internal tool for the same weakness, to help them</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="2"> <span>Trying the attacks on OWASP Juice Shop running on your own computer</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="3"> <span>Trying the attacks on any public website that has a security contact page</span></label>
+      <div class="gfb" id="gfb-1"></div>
+    </div>
+    <div class="gq" data-i="2">
+      <p class="gstem">3. In the OWASP Top 10:2025, which category is ranked first?</p>
+      <label class="gopt"><input type="radio" name="g2" value="0"> <span>Injection</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="1"> <span>Cryptographic Failures</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="2"> <span>Security Misconfiguration</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="3"> <span>Broken Access Control</span></label>
+      <div class="gfb" id="gfb-2"></div>
+    </div>
+    <div class="gq" data-i="3">
+      <p class="gstem">4. What is a CWE?</p>
+      <label class="gopt"><input type="radio" name="g3" value="0"> <span>A numbered entry in a public list of types of software weakness, such as CWE-89 for SQL injection</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="1"> <span>A report of one specific weakness in one specific product version</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="2"> <span>A score from 0 to 10 for how serious a weakness is</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="3"> <span>A security certification for developers</span></label>
+      <div class="gfb" id="gfb-3"></div>
+    </div>
+    <div class="gq" data-i="4">
+      <p class="gstem">5. Which command starts Juice Shop so that only your own computer can reach it?</p>
+      <label class="gopt"><input type="radio" name="g4" value="0"> <span>docker run --rm -p 3000:3000 bkimminich/juice-shop</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="1"> <span>docker run --rm -p 0.0.0.0:3000:3000 bkimminich/juice-shop</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="2"> <span>docker run --rm -p 127.0.0.1:3000:3000 bkimminich/juice-shop</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="3"> <span>docker run --rm --network host bkimminich/juice-shop</span></label>
+      <div class="gfb" id="gfb-4"></div>
+    </div>
+    <div class="gactions"><button class="pbtn" id="gcheck">Check answers</button><span class="gstate" id="gstate"></span></div>
+    <p class="recap"><b>Module recap.</b> Each module moves from theory to the OWASP category, the fix and a lab. Test only what you own or have written permission to test, keep the practice apps on <code>127.0.0.1</code>, and stop them when you finish.</p>
+  </div>
+</section>
+
+<div class="done">
+  <span class="tag">Completion</span>
+  <label id="lbl"><input type="checkbox" id="cmplt" disabled> I have finished Module 0: Orientation and lab setup.</label>
+  <p class="sync" id="sync"></p>
+</div>
+
+<div class="pager">
+  <a class="pbtn ghost" href="index.html?v=2026110601">&#8592; Dashboard</a>
+  <a class="pbtn off" id="nextbtn" href="sc1-m1.html?v=2026110601">Module 1 &#8594;</a>
+</div>
+
+<footer>
+  <div>SF Knowledge Hub &middot; Secure Coding: Basic to Intermediate &middot; Module 0 of 6</div>
+  <div>build 2026110601</div>
+</footer>
+
+</div>
+<!-- SF auth gate: Google SSO or email/password sign-in. -->
+<script>
+(function () {
+  /* Live config for sfcertification-grafana. */
+  const firebaseConfig = {
+    apiKey: "__FIREBASE_API_KEY__",
+    authDomain: "sfcertification-grafana.firebaseapp.com",
+    projectId: "sfcertification-grafana",
+    storageBucket: "sfcertification-grafana.firebasestorage.app",
+    messagingSenderId: "227322696511",
+    appId: "1:227322696511:web:12e7ced7dd3d45fa06798a"
+  };
+  const ALLOWED_DOMAIN = "sourcefuse.com";
+  /* Admins: always allowed in, without a nomination. */
+  const ADMINS = ["jv.ravichandran@sourcefuse.com", "noushin.khan@sourcefuse.com"];
+
+  /* `courses` document id for this course. Nominations are read from
+     courses/{COURSE_ID}/nominations/{email}, managed in the SF Knowledge Hub. */
+  const COURSE_ID = "__SC1_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  /* True when the page is shown inside another page (the SF Knowledge Hub). */
+  const IN_FRAME = (function(){ try { return window.self !== window.top; } catch (_) { return true; } })();
+
+  let auth, GoogleProvider, signInPopup, signInEmail, onAuth, signOutFn, setPersist, localPersist, readNomination;
+  let readyCb = null;
+
+  async function initFirebase() {
+    const appMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const authMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+    const app = appMod.getApps().length ? appMod.getApp() : appMod.initializeApp(firebaseConfig);
+    auth = authMod.getAuth(app);
+    GoogleProvider = authMod.GoogleAuthProvider;
+    signInPopup    = (p) => authMod.signInWithPopup(auth, p);
+    signInEmail    = (e, pw) => authMod.signInWithEmailAndPassword(auth, e, pw);
+    onAuth         = (cb) => authMod.onAuthStateChanged(auth, cb);
+    signOutFn      = () => authMod.signOut(auth);
+    setPersist     = authMod.setPersistence;
+    localPersist   = authMod.browserLocalPersistence;
+    try { await setPersist(auth, localPersist); } catch (_) {}
+    const fsMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+    const db = fsMod.getFirestore(app);
+    readNomination = (email) => fsMod.getDoc(fsMod.doc(db, "courses", COURSE_ID, "nominations", email));
+  }
+
+  function styleTag(){return `<style>
+    .sf-auth-backdrop{position:fixed;inset:0;background:rgba(16,38,60,.55);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+    .sf-auth-card{background:#fff;border-radius:22px;padding:42px 36px 38px;width:100%;max-width:420px;box-shadow:0 12px 40px rgba(10,30,55,.25);text-align:center;font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    .sf-auth-badge{display:inline-block;background:var(--level,#1a6eb5);color:#fff;font-weight:700;font-size:12px;padding:4px 11px;border-radius:14px;margin-bottom:14px}
+    .sf-auth-card h2{margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.3;color:#15212d;font-family:inherit}
+    .sf-auth-sub{margin:0 auto 26px;max-width:330px;color:#5e6b79;font-size:14.5px;line-height:1.6}
+    .sf-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#366db0;color:#fff;border:0;border-radius:9px;padding:15px;font-size:15.5px;font-weight:600;cursor:pointer;font-family:inherit}
+    .sf-btn:hover{background:#2e5f9b}
+    .sf-btn svg{width:19px;height:19px;flex:none}
+    .sf-or{margin:20px 0;color:#9da7b2;font-size:11.5px;font-weight:500;letter-spacing:.14em}
+    .sf-inp{display:block;width:100%;box-sizing:border-box;border:1.5px solid #dfe5eb;border-radius:9px;padding:13px 14px;font-size:15px;margin:0 0 9px;color:#15212d;background:#fff;font-family:inherit}
+    .sf-inp::placeholder{color:#757575}
+    .sf-inp:focus{outline:none;border-color:#366db0}
+    .sf-err{color:#b5341a;font-size:13px;margin-top:12px;min-height:16px;line-height:1.5}
+    .sf-frame{color:#5e6b79;font-size:12.5px;line-height:1.55;margin:14px 0 0}
+    .sf-frame a{color:#366db0}
+  </style>`;}
+
+  function signinHTML(){return `
+    <div class="sf-auth-backdrop" id="sf-auth"><div class="sf-auth-card">
+      <h2>Secure Coding: Basic to Intermediate</h2>
+      <p class="sf-auth-sub">Sign in with your SourceFuse Google account to access the course and save your progress.</p>
+      <button class="sf-btn" id="sf-google" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.35 11.1H12v3.2h5.35c-.5 2.5-2.6 3.9-5.35 3.9a6.2 6.2 0 1 1 4.1-10.85l2.4-2.4A9.6 9.6 0 1 0 12 21.6c5 0 9.6-3.6 9.6-9.6 0-.3 0-.6-.05-.9z"/></svg> Sign in with Google</button>
+      <div class="sf-or">OR</div>
+      <input class="sf-inp" id="sf-email" type="email" placeholder="you@sourcefuse.com" autocomplete="username">
+      <input class="sf-inp" id="sf-pass" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="sf-btn" id="sf-email-btn" type="button">Sign in with email</button>
+      <div class="sf-err" id="sf-err"></div>
+      ${IN_FRAME ? '<p class="sf-frame">If the Google sign-in window does not open, <a href="' + location.href + '" target="_blank" rel="noopener">open the course in a new tab</a>, or use Sign in with email.</p>' : ''}
+    </div></div>`;}
+
+  function fail(m){ const e = document.getElementById("sf-err"); if (e) e.textContent = m; }
+  function validDomain(x){
+    if (typeof x !== "string") return false;
+    return x.toLowerCase().endsWith("@" + ALLOWED_DOMAIN);
+  }
+  /* Same check as the SF Knowledge Hub: this course's nominations document
+     for the email exists and is not marked nominated: false. */
+  async function isNominated(x){
+    if (typeof x !== "string") return false;
+    if (ADMINS.indexOf(x.toLowerCase()) !== -1) return true;
+    if (!readNomination) return false;
+    try {
+      const s = await readNomination(x.toLowerCase());
+      return s.exists() && s.data().nominated !== false;
+    } catch (e) {
+      console.log("[auth] nomination read failed:", e && e.message);
+      return false;
+    }
+  }
+  function showNotNominated(){
+    const card = document.getElementById("sf-auth");
+    if (!card) return;
+    card.style.display = "flex";
+    card.innerHTML = '<div class="sf-auth-card">'
+      + '<div class="sf-auth-badge">SF Knowledge Hub</div>'
+      + '<h2>You are not nominated to this course</h2>'
+      + '</div>';
+  }
+  function proceed(user){
+    const el = document.getElementById("sf-auth"); if (el) el.remove();
+    if (readyCb) readyCb(user, signOutFn);
+  }
+
+  function wireSignin(){
+    document.getElementById("sf-google").addEventListener("click", async () => {
+      fail("");
+      if (!signInPopup) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const p = new GoogleProvider();
+      p.setCustomParameters({ hd: ALLOWED_DOMAIN });
+      try {
+        const r = await signInPopup(p);
+        const u = r && r.user;
+        const email = (u && u.email) || "";
+        if (!validDomain(email)) {
+          await signOutFn();
+          return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+        }
+        if (!(await isNominated(email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithPopup failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/popup-blocked")
+          return fail(IN_FRAME
+            ? "The sign-in window was blocked here. Open the course in a new tab using the link below, or use Sign in with email."
+            : "Your browser blocked the sign-in window. Allow pop-ups for this site, then try again.");
+        if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request")
+          return fail("Sign-in was closed before it finished. Try again.");
+        fail("Google sign-in couldn't complete. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+    document.getElementById("sf-email-btn").addEventListener("click", async () => {
+      fail("");
+      if (!signInEmail) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const email = (document.getElementById("sf-email").value || "").trim().toLowerCase();
+      const pass  = document.getElementById("sf-pass").value || "";
+      if (!email || !pass) return fail("Enter your email and password.");
+      if (!validDomain(email)) return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      try {
+        const r = await signInEmail(email, pass);
+        const u = r && r.user;
+        if (!(await isNominated((u && u.email) || email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithEmailAndPassword failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found")
+          return fail("Incorrect email or password.");
+        fail("Sign-in failed. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+  }
+
+  async function mount(onReady){
+    readyCb = onReady;
+    document.head.insertAdjacentHTML("beforeend", styleTag());
+    document.body.insertAdjacentHTML("beforeend", signinHTML());
+    /* Hidden until onAuth reports no session. A signed-in nominated user
+       goes straight through without the overlay appearing at all. */
+    const authCard = document.getElementById("sf-auth");
+    if (authCard) authCard.style.display = "none";
+    try { await initFirebase(); }
+    catch (e) {
+      console.log("[auth] init failed:", e && e.message);
+      if (authCard) authCard.style.display = "flex";
+      fail("Sign-in service didn't load. Reload the page.");
+      return;
+    }
+    if (onAuth) onAuth(async (u) => {
+      if (!u) {
+        if (authCard) authCard.style.display = "flex";
+        return;
+      }
+      if (!validDomain(u.email)) {
+        await signOutFn();
+        if (authCard) authCard.style.display = "flex";
+        return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      }
+      /* Signed in and on-domain, but not on the list. Do not sign them out
+         automatically: the session is shared with the SF Knowledge Hub and
+         dropping it would sign them out of the Hub too. */
+      if (!(await isNominated(u.email))) return showNotNominated();
+      proceed(u);
+    });
+    wireSignin();
+  }
+
+  window.SFAuth = { mount: mount };
+})();
+</script>
+
+<!-- Progress: localStorage written first, Firestore synced after. -->
+<script type="module">
+(function(){
+  /* `courses` document id for this course. Same value in every file of this course. */
+  var CP_COURSE_ID = "__SC1_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  var MODULE_KEYS = ["sc1-m0", "sc1-m1", "sc1-m2", "sc1-m3", "sc1-m4", "sc1-m5", "sc1-m6"];
+  var SECTION_TOTALS = {"sc1-m0": 4, "sc1-m1": 4, "sc1-m2": 4, "sc1-m3": 4, "sc1-m4": 4, "sc1-m5": 4, "sc1-m6": 4};   /* sections per module */
+  var FB = "https://www.gstatic.com/firebasejs/10.12.2/";
+  var LS  = "sf-sc1:";                       /* module completion, final test summary */
+  var LSS = "sf-sc1-sec:";                   /* section ticks */
+  var GK  = "sf-sc1-gate:";                  /* check-question gate */
+
+  var fs = null, db = null, cpRef = null, prRef = null, erRef = null,
+      user = null, courseObj = {}, examObj = null, ready = false;
+
+  function stamp(){
+    var p = function(n){ return String(n).padStart(2,"0"); };
+    var d = new Date();
+    return { date: d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()),
+             time: p(d.getHours())+":"+p(d.getMinutes())+":"+p(d.getSeconds()) };
+  }
+  /* Legacy progress/{uid} field for a module: sc1-m1 -> sc1_m1 */
+  function secField(mk){ return mk.replace(/-/g, "_"); }
+
+  /* ---- localStorage layer ---------------------------------------------- */
+  function jRead(k){ try { return JSON.parse(localStorage.getItem(k) || "{}"); } catch(_) { return {}; } }
+  function jWrite(k, o){ try { localStorage.setItem(k, JSON.stringify(o)); } catch(_) {} }
+  function lsRead(){ return jRead(LS + user.uid); }
+  function lsWrite(o){ jWrite(LS + user.uid, o); }
+  function secRead(){ return jRead(LSS + user.uid); }
+  function secWrite(o){ jWrite(LSS + user.uid, o); }
+
+  function state(){
+    var o = lsRead();
+    return { modules: o.modules || {}, exam: o.exam || null, sections: secRead() };
+  }
+  function lsSetModule(mk, done){
+    var o = lsRead();
+    o.modules = o.modules || {};
+    if (done) { var t = stamp(); o.modules[mk] = { completedOn: t.date, completedAt: t.time }; }
+    else delete o.modules[mk];
+    lsWrite(o);
+    return state();
+  }
+  function isDone(st, mk){
+    var m = (st && st.modules || {})[mk];
+    return !!(m && m.completedOn);
+  }
+  function sectionsDone(st, mk){
+    var a = ((st && st.sections) || {})[mk] || [];
+    return a.length;
+  }
+
+  /* ---- Firestore layer --------------------------------------------------- */
+  function base(){ return { email: user.email, name: user.displayName || user.email, courses: {} }; }
+
+  function setModuleInProgress(mk){
+    if (!ready || !mk) return Promise.resolve();
+    if (courseObj.courseCompletedOn) return Promise.resolve();
+    if (isDone(courseObj, mk)) return Promise.resolve();
+    var needStart = !courseObj.courseStartedOn;
+    if (courseObj.moduleInProgress === mk && !needStart) return Promise.resolve();
+    var t = stamp();
+    var cu = { moduleInProgress: mk };
+    if (needStart) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+    var update = base(); update.courses[CP_COURSE_ID] = cu;
+    courseObj.moduleInProgress = mk;
+    if (needStart) courseObj.courseStartedOn = t.date;
+    return fs.setDoc(cpRef, update, { merge: true })
+      .catch(function(e){ console.error("[progress] moduleInProgress write failed", e); });
+  }
+
+  /* Read-then-merge completion write. */
+  function completeModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    var t = stamp();
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      if (!obj.courseStartedOn) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+      if (!(existing[mk] && existing[mk].completedOn)) cu.modules[mk] = { completedOn: t.date, completedAt: t.time };
+      var doneAfter = function(k){ return !!((existing[k] && existing[k].completedOn) || cu.modules[k]); };
+      if (MODULE_KEYS.every(doneAfter)) {
+        if (!obj.courseCompletedOn) { cu.courseCompletedOn = t.date; cu.courseCompletedAt = t.time; }
+        cu.moduleInProgress = null;
+      } else {
+        var next = null;
+        for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+        cu.moduleInProgress = next;
+      }
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      courseObj = Object.assign({}, obj, cu, { modules: Object.assign({}, existing, cu.modules) });
+      return fs.setDoc(cpRef, update, { merge: true });
+    });
+  }
+
+  /* Section tick: localStorage first, then progress/{uid}.sc1_mN (arrayUnion). */
+  function tickSection(mk, n){
+    var s = secRead();
+    var a = s[mk] || [];
+    if (a.indexOf(n) === -1) { a.push(n); a.sort(function(x,y){ return x-y; }); }
+    s[mk] = a; secWrite(s);
+    if (!ready) return Promise.reject(new Error("offline"));
+    var upd = {}; upd[secField(mk)] = fs.arrayUnion(n);
+    return fs.setDoc(prRef, upd, { merge: true });
+  }
+
+  /* Final test attempt: one attempt document in courseExamResults + best-attempt summary in examResults. */
+  function recordExam(r){
+    var t = stamp();
+    var o = lsRead();
+    var prev = o.exam || {};
+    var attempts = Math.max(prev.attempts || 0, (examObj && examObj.attempts) || 0, r.attemptNumber);
+    var bestPassed = !!(prev.passed || (examObj && examObj.passed) || r.pass);
+    var bestPct = Math.max(prev.score || 0, (examObj && examObj.score) || 0, r.pct);
+    o.exam = { attempts: attempts, passed: bestPassed, score: bestPct, lastPct: r.pct, lastPass: r.pass,
+               submittedOn: t.date, submittedAt: t.time };
+    lsWrite(o);
+    if (!ready) return Promise.reject(new Error("offline"));
+
+    var attemptId = t.date + "_" + t.time.replace(/:/g, "");
+    var aRef = fs.doc(db, "courseExamResults", user.email, "courses", CP_COURSE_ID, "attempts", attemptId);
+    var body = {
+      email: user.email, name: user.displayName || user.email, courseId: CP_COURSE_ID,
+      attemptNumber: r.attemptNumber, correct: r.correct, total: r.total, pct: r.pct, pass: r.pass,
+      submittedAt: new Date().toISOString(), durationSeconds: r.durationSeconds, timeUp: r.timeUp,
+      detail: r.detail
+    };
+    return fs.setDoc(aRef, body).then(function(){
+      return fs.getDoc(erRef);
+    }).then(function(snap){
+      var cur = (snap.exists() ? (snap.data() || {})[CP_COURSE_ID] : null) || {};
+      var better = !cur.passed && (r.pass || (r.pct >= (cur.score || 0)));
+      var summary = {
+        attempts: Math.max((cur.attempts || 0) + 1, r.attemptNumber),
+        correct: better ? r.correct : cur.correct,
+        total: better ? r.total : cur.total,
+        score: better ? r.pct : cur.score,
+        passed: !!(cur.passed || r.pass),
+        timeTaken: better ? r.durationSeconds : cur.timeTaken,
+        timedOut: better ? r.timeUp : cur.timedOut,
+        submittedAt: better ? new Date().toISOString() : cur.submittedAt
+      };
+      examObj = summary;
+      var upd = { learnerEmail: user.email, learnerName: user.displayName || user.email };
+      upd[CP_COURSE_ID] = summary;
+      return fs.setDoc(erRef, upd, { merge: true });
+    });
+  }
+
+  /* ---- Boot ------------------------------------------------------------ */
+  async function start(u, moduleKey, onState){
+    user = u;
+    var local = state();
+    onState(local, false);                       /* paint from localStorage at once */
+    try {
+      var appMod  = await import(FB + "firebase-app.js");
+      fs          = await import(FB + "firebase-firestore.js");
+      var app = appMod.getApp();                 /* DEFAULT app, never a named one */
+      db    = fs.getFirestore(app);
+      cpRef = fs.doc(db, "courseProgress", user.uid);
+      prRef = fs.doc(db, "progress", user.uid);
+      erRef = fs.doc(db, "examResults", user.uid);
+
+      var cs = await fs.getDoc(cpRef);
+      if (cs.exists()) courseObj = ((cs.data() || {}).courses || {})[CP_COURSE_ID] || {};
+      var remoteSec = {};
+      try {
+        var ps = await fs.getDoc(prRef);
+        var pd = ps.exists() ? (ps.data() || {}) : {};
+        MODULE_KEYS.forEach(function(k){ if (Array.isArray(pd[secField(k)])) remoteSec[k] = pd[secField(k)]; });
+      } catch(e){ console.error("[progress] section read failed", e); }
+      try {
+        var es = await fs.getDoc(erRef);
+        examObj = es.exists() ? ((es.data() || {})[CP_COURSE_ID] || null) : null;
+      } catch(e){ console.error("[progress] exam read failed", e); }
+      ready = true;
+
+      /* Merge: anything complete in either store stays complete. */
+      var o = lsRead();
+      o.modules = Object.assign({}, local.modules || {}, courseObj.modules || {});
+      if (examObj) {
+        var le = o.exam || {};
+        o.exam = { attempts: Math.max(le.attempts || 0, examObj.attempts || 0),
+                   passed: !!(le.passed || examObj.passed),
+                   score: Math.max(le.score || 0, examObj.score || 0),
+                   lastPct: le.lastPct, lastPass: le.lastPass,
+                   submittedOn: le.submittedOn, submittedAt: le.submittedAt };
+      }
+      lsWrite(o);
+      var sLocal = secRead(), pushSec = [];
+      MODULE_KEYS.forEach(function(k){
+        var a = (sLocal[k] || []).slice();
+        (remoteSec[k] || []).forEach(function(n){ if (a.indexOf(n) === -1) a.push(n); });
+        (sLocal[k] || []).forEach(function(n){ if ((remoteSec[k] || []).indexOf(n) === -1) pushSec.push([k, n]); });
+        if (a.length) { a.sort(function(x,y){ return x-y; }); sLocal[k] = a; }
+      });
+      secWrite(sLocal);
+      onState(state(), true);
+
+      /* Push anything localStorage had that Firestore did not. */
+      var pending = Object.keys(local.modules || {}).filter(function(k){ return !isDone(courseObj, k); });
+      for (var i = 0; i < pending.length; i++) {
+        try { await completeModule(pending[i]); } catch(e){ console.error("[progress] backfill failed", e); }
+      }
+      for (var j = 0; j < pushSec.length; j++) {
+        try { var upd = {}; upd[secField(pushSec[j][0])] = fs.arrayUnion(pushSec[j][1]); await fs.setDoc(prRef, upd, { merge: true }); }
+        catch(e){ console.error("[progress] section backfill failed", e); }
+      }
+      await setModuleInProgress(moduleKey);
+    } catch(e) {
+      console.error("[progress] Firestore unavailable, localStorage only:", e);
+      onState(state(), false);
+    }
+  }
+
+  /* ---- Redo -----------------------------------------------------------
+     Clears one module: completion, section ticks and check-question answers,
+     on this device and in Firestore. Final test attempts are records
+     and are left untouched.                                               */
+  function clearLocalModule(mk){
+    var o = lsRead(); if (o.modules) delete o.modules[mk]; lsWrite(o);
+    var s = secRead(); delete s[mk]; secWrite(s);
+    var g = jRead(GK + user.uid); delete g[mk]; jWrite(GK + user.uid, g);
+    return state();
+  }
+  function redoModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      cu.modules[mk] = fs.deleteField();
+      if (obj.courseCompletedOn) { cu.courseCompletedOn = fs.deleteField(); cu.courseCompletedAt = fs.deleteField(); }
+      var doneAfter = function(k){ return k !== mk && !!(existing[k] && existing[k].completedOn); };
+      var next = null;
+      for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+      cu.moduleInProgress = next;
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      var fresh = Object.assign({}, existing); delete fresh[mk];
+      courseObj = Object.assign({}, obj, { modules: fresh, moduleInProgress: next });
+      delete courseObj.courseCompletedOn; delete courseObj.courseCompletedAt;
+      var pr = {}; pr[secField(mk)] = fs.deleteField();
+      return Promise.all([fs.setDoc(cpRef, update, { merge: true }), fs.setDoc(prRef, pr, { merge: true })]);
+    });
+  }
+
+  window.SFProgress = {
+    start: start,
+    redo: redoModule,
+    clearLocalModule: clearLocalModule,
+    moduleKeys: MODULE_KEYS,
+    sectionTotals: SECTION_TOTALS,
+    isDone: isDone,
+    sectionsDone: sectionsDone,
+    read: function(){ return user ? state() : {}; },
+    setLocal: function(mk, done){ return lsSetModule(mk, done); },
+    sync: function(mk, done){
+      if (!ready) return Promise.reject(new Error("offline"));
+      return done ? completeModule(mk) : Promise.resolve();
+    },
+    tickSection: tickSection,
+    recordExam: recordExam,
+    examRemote: function(){ return examObj; },
+    isReady: function(){ return ready; },
+    gateKey: GK,
+    courseId: function(){ return CP_COURSE_ID; }
+  };
+})();
+</script>
+
+<script type="module">
+(function(){
+  var MK = "sc1-m0";
+  var PASS_PCT = 70;   /* module check: share of questions that must be right */
+  var NSEC = 4;
+  var GATE = [{"answer": 1, "why": "A deliberately insecure app must be reachable only from your own computer. Binding it to 127.0.0.1 means other computers cannot connect to it at all."}, {"answer": 2, "why": "You may test only systems you own or have written permission to test. The practice apps on your own computer are there for exactly this."}, {"answer": 3, "why": "Broken Access Control is A01 in both the 2021 and the 2025 lists. Security Misconfiguration moved up to A02 in 2025."}, {"answer": 0, "why": "CWE (Common Weakness Enumeration) names types of weakness. A CVE is one specific weakness in one product, and CVSS is the 0 to 10 score."}, {"answer": 2, "why": "Putting 127.0.0.1 before the port tells Docker to accept connections only from your own computer. The other three accept connections from other computers too."}];
+  var P = window.SFProgress;
+  var KEYS = P.moduleKeys;
+
+  function gateRead(uid){ try { return JSON.parse(localStorage.getItem(P.gateKey + uid) || "{}"); } catch(_) { return {}; } }
+  function gateWrite(uid, o){ try { localStorage.setItem(P.gateKey + uid, JSON.stringify(o)); } catch(_) {} }
+
+  document.querySelectorAll('.langbar button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var open = b.getAttribute('data-lang') === 'open';
+      var scope = b.closest('.stage-body') || document;
+      scope.querySelectorAll('details.lang').forEach(function(d){ d.open = open; });
+    });
+  });
+
+  window.SFAuth.mount(async function(user, signOut){
+    document.getElementById('who').innerHTML =
+      (user.email || '') + ' <button class="signout" id="signout">Sign out</button>';
+    var so = document.getElementById('signout');
+    if (so && signOut) so.onclick = function(){ signOut().then(function(){ location.reload(); }); };
+
+    var box = document.getElementById('cmplt'), lbl = document.getElementById('lbl'),
+        sync = document.getElementById('sync'), nextbtn = document.getElementById('nextbtn'),
+        gcheck = document.getElementById('gcheck'), gstate = document.getElementById('gstate');
+    var gatePassed = false;
+
+    function showGateSatisfied(){
+      gatePassed = true;
+      GATE.forEach(function(gq, i){
+        var rs = document.querySelectorAll('input[name="g' + i + '"]');
+        if (rs[gq.answer]) rs[gq.answer].checked = true;
+        var fb = document.getElementById('gfb-' + i);
+        if (fb) fb.innerHTML = '<div class="callout good"><span class="tag">Correct</span><p>' + gq.why + '</p></div>';
+      });
+      document.querySelectorAll('.gq input[type=radio]').forEach(function(r){ r.disabled = true; });
+      if (gcheck) gcheck.style.display = 'none';
+      gstate.textContent = 'Check questions passed';
+    }
+
+    gcheck.addEventListener('click', function(){
+      var nRight = 0, unanswered = 0;
+      var need = Math.ceil(GATE.length * PASS_PCT / 100);
+      GATE.forEach(function(gq, i){
+        var sel = document.querySelector('input[name="g' + i + '"]:checked');
+        var fb  = document.getElementById('gfb-' + i);
+        if (!sel) { unanswered++; fb.innerHTML = ''; return; }
+        var ok = parseInt(sel.value, 10) === gq.answer;
+        if (ok) nRight++;
+        fb.innerHTML = ok
+          ? '<div class="callout good"><span class="tag">Correct</span><p>' + gq.why + '</p></div>'
+          : '<div class="callout caution"><span class="tag">Not quite</span><p>Look at the module again and try once more.</p></div>';
+      });
+      if (unanswered) { gstate.textContent = 'Answer every question first.'; return; }
+      if (nRight < need) { gstate.textContent = nRight + ' of ' + GATE.length + ' correct. You need ' + need + '. Try again.'; return; }
+      var gs = gateRead(user.uid); gs[MK] = true; gateWrite(user.uid, gs);
+      showGateSatisfied();
+      paint(P.read());
+    });
+
+    document.querySelectorAll('input.sec').forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if (!cb.checked) return;
+        var n = parseInt(cb.getAttribute('data-sec'), 10);
+        var pr = P.tickSection(MK, n);
+        paint(P.read());
+        pr.catch(function(e){
+          console.error('[progress] section sync failed', e);
+          sync.textContent = 'Saved on this device. It will sync to your SF record next time you open this page online.';
+        });
+      });
+    });
+
+    function paint(state){
+      var ticks = (state.sections || {})[MK] || [];
+      for (var i = 1; i <= NSEC; i++) {
+        var cb = document.querySelector('input.sec[data-sec="' + i + '"]');
+        var on = ticks.indexOf(i) !== -1;
+        cb.checked = on; cb.disabled = on;
+        document.getElementById('sd-' + i).classList.toggle('ticked', on);
+        document.getElementById('num-' + i).classList.toggle('ok', on);
+      }
+      var nDone = KEYS.filter(function(k){ return P.isDone(state, k); }).length;
+      var secCount = Math.min(ticks.length, NSEC);
+      document.getElementById('fill').style.width = (secCount / NSEC) * 100 + '%';
+      document.getElementById('count').textContent = 'This module: ' + secCount + ' of ' + NSEC
+        + ' sections \u00b7 Course: ' + nDone + ' of ' + KEYS.length + ' modules complete';
+
+      var done = P.isDone(state, MK);
+      if (!gatePassed && (done || gateRead(user.uid)[MK])) showGateSatisfied();
+      if (done) {
+        var m = (state.modules || {})[MK] || {};
+        box.checked = true; box.disabled = true;
+        lbl.classList.add('checked'); lbl.classList.remove('locked');
+        sync.textContent = 'Completed on ' + (m.completedOn || '') + (m.completedAt ? ' at ' + m.completedAt : '');
+        nextbtn.classList.remove('off');
+        return;
+      }
+      nextbtn.classList.add('off');
+      box.checked = false;
+      var allSec = secCount >= NSEC;
+      box.disabled = !(allSec && gatePassed);
+      lbl.classList.toggle('locked', box.disabled);
+      if (!allSec && !gatePassed) sync.textContent = 'To unlock: finish every section and pass the check questions.';
+      else if (!allSec) sync.textContent = 'To unlock: tick the finish box at the end of every section.';
+      else if (!gatePassed) sync.textContent = 'To unlock: pass the check questions above.';
+      else sync.textContent = '';
+    }
+
+    await P.start(user, MK, function(state){ paint(state); });
+
+    box.addEventListener('change', async function(){
+      if (!box.checked) return;
+      var state = P.setLocal(MK, true);          /* localStorage first */
+      paint(state);
+      sync.textContent = 'Saved on this device. Syncing\u2026';
+      try {
+        await P.sync(MK, true);
+        var m = (state.modules || {})[MK] || {};
+        sync.textContent = 'Completed on ' + (m.completedOn || '') + ' \u00b7 saved to your SF record';
+      } catch(e) {
+        console.error('[progress] sync failed', e);
+        sync.textContent = 'Saved on this device. It will sync to your SF record next time you open this page online.';
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
