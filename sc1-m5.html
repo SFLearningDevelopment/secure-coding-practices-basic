@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<!-- build: 2026110601 -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5 &mdash; Injection and cross-site scripting | Secure Coding: Basic to Intermediate</title>
+<style>
+:root{
+  --ink:#1B2124; --ink-2:#495259; --rule:#DFE3DE; --paper:#F6F7F5; --panel:#FFFFFF;
+  --level:#1a6eb5; --level-soft:#E8F1FA;
+  --lens:#B0721A; --lens-soft:#FBF4E7;
+  --verify:#41525F; --verify-soft:#EEF2F4;
+  --caution:#9E3025; --caution-soft:#FBEDEB;
+  --ok:#2E6B34; --ok-soft:#E9F2E9;
+  --serif: Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif;
+  --sans: ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono: ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 22px 90px}
+a{color:var(--level);text-decoration-thickness:1px;text-underline-offset:2px}
+.masthead{border-bottom:1px solid var(--rule);background:var(--panel)}
+.masthead .wrap{padding-top:38px;padding-bottom:30px}
+.crumb{font-family:var(--sans);font-size:13px;color:var(--ink-2);margin:0 0 14px}
+.who{float:right;font-size:12.5px;color:var(--ink-2)}
+.back{color:var(--level);text-decoration:none;font-weight:600}
+.back:hover{text-decoration:underline}
+.signout{background:none;border:0;color:var(--level);font-size:12.5px;cursor:pointer;
+  text-decoration:underline;font-family:inherit;padding:0}
+.chip{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.02em;
+  color:#fff;background:var(--level);border-radius:3px;padding:3px 9px;margin-right:8px}
+h1{font-family:var(--sans);font-weight:640;font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.015em}
+.deck{font-size:18px;color:var(--ink-2);margin:0;max-width:64ch}
+.facts{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px;padding-top:18px;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:13.5px;color:var(--ink-2)}
+.facts b{display:block;color:var(--ink);font-weight:600}
+.progress{position:sticky;top:0;z-index:20;background:rgba(246,247,245,.94);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+.progress .wrap{display:flex;align-items:center;gap:14px;padding-top:9px;padding-bottom:9px}
+.bar{flex:1;height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--level);transition:width .25s ease}
+.count{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+h2{font-family:var(--sans);font-weight:640;font-size:22px;line-height:1.25;margin:0;letter-spacing:-.01em}
+h3{font-family:var(--sans);font-weight:620;font-size:16px;margin:26px 0 8px}
+p{margin:0 0 14px;max-width:72ch}
+ul,ol{max-width:72ch;padding-left:22px}
+li{margin-bottom:7px}
+section.stage{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.stage-head{display:flex;gap:16px;align-items:baseline;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:14px;color:var(--level);border:1px solid var(--level);
+  border-radius:50%;width:30px;height:30px;min-width:30px;display:flex;align-items:center;
+  justify-content:center;align-self:flex-start;margin-top:2px}
+.num.ok{background:var(--level);color:#fff}
+.goal{font-family:var(--sans);font-size:14px;color:var(--ink-2);margin:0 0 18px 46px}
+.stage-body{margin-left:46px}
+.callout{border-radius:5px;padding:14px 16px;margin:0 0 16px;font-size:15.5px}
+.callout p{margin:0;max-width:66ch}
+.callout p+p{margin-top:9px}
+.callout ul{margin:6px 0 0;font-size:15px}
+.callout .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;display:block;margin-bottom:5px}
+.lens{background:var(--lens-soft);border-left:3px solid var(--lens)}
+.lens .tag{color:var(--lens)}
+.verify{background:var(--verify-soft);border-left:3px dashed var(--verify)}
+.verify .tag{color:var(--verify)}
+.caution{background:var(--caution-soft);border-left:3px solid var(--caution)}
+.caution .tag{color:var(--caution)}
+.good{background:var(--ok-soft);border-left:3px solid var(--ok)}
+.good .tag{color:var(--ok)}
+.done{background:var(--level-soft);border-radius:5px;padding:16px 18px;margin-top:26px}
+.done .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;color:var(--level);display:block;margin-bottom:8px}
+.done label{display:flex;gap:11px;align-items:flex-start;font-size:15.5px;cursor:pointer;margin:0}
+.done input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.done label.checked{color:var(--ink-2)}
+.done .sync{font-family:var(--sans);font-size:12px;color:var(--ink-2);margin:9px 0 0 27px;min-height:15px}
+.done input:disabled{accent-color:#B9C2BA}
+.done label.locked{color:#8D979C;cursor:not-allowed}
+.orient{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.secdone{display:flex;gap:10px;align-items:center;font-family:var(--sans);font-size:14px;color:var(--ink-2);
+  border-top:1px solid var(--rule);margin-top:22px;padding-top:14px;cursor:pointer}
+.secdone input{accent-color:var(--level);width:16px;height:16px;flex:none}
+.secdone.ticked{color:var(--level);font-weight:600}
+section.stage.check{border-color:#C9DAEA;background:#FCFDFE}
+.gstem{font-weight:600;margin:0 0 12px}
+.gq{margin-bottom:26px}
+.gopt{display:flex;gap:11px;align-items:flex-start;font-size:16px;margin-bottom:8px;cursor:pointer;max-width:72ch}
+.gopt input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.gopt input:disabled+span{color:var(--ink-2)}
+.gfb{margin-top:12px}
+.gfb .callout{margin-bottom:0}
+.gactions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.gstate{font-family:var(--sans);font-size:13px;color:var(--ink-2)}
+button.pbtn{border:0;cursor:pointer;font-family:var(--sans)}
+.recap{font-family:var(--sans);font-size:15px;color:var(--ink-2);border-top:1px solid var(--rule);
+  margin-top:24px;padding-top:16px}
+.recap b{color:var(--ink);font-weight:620}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:34px 0 0;flex-wrap:wrap}
+.pbtn{display:inline-block;background:var(--level);color:#fff;text-decoration:none;
+  font-family:var(--sans);font-size:14.5px;font-weight:600;padding:11px 22px;border-radius:8px}
+.pbtn:hover{filter:brightness(1.08)}
+.pbtn.ghost{background:none;color:var(--level);border:1.5px solid var(--level)}
+.pbtn.off,.pbtn:disabled{background:none;color:#A9B2B6;border:1.5px solid var(--rule);pointer-events:none}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:0 0 16px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-size:13px;font-weight:620}
+td code,li code,p code{font-family:var(--mono);font-size:.86em;background:#EEF2F4;border-radius:3px;padding:1px 5px}
+.fname{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);margin:0 0 4px}
+pre.code{background:#122130;color:#E3EAF1;font-family:var(--mono);font-size:13.5px;line-height:1.55;
+  padding:14px 16px;border-radius:6px;overflow-x:auto;margin:0 0 16px;white-space:pre}
+pre.code .c{color:#8FA3B5}
+pre.term{background:#1B2124;color:#D8E0D9}
+figure{margin:0 0 22px}
+figcaption{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);margin-top:8px}
+svg{width:100%;height:auto;display:block}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding-top:18px;
+  font-family:var(--sans);font-size:12.5px;color:var(--ink-2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:620px){
+  body{font-size:16px}
+  .stage-body,.goal{margin-left:0}
+  .stage-head{gap:12px}
+  section.stage,.orient{padding:20px 18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<style>
+  details.lang{border:1px solid var(--rule);border-radius:6px;margin:0 0 10px;background:var(--panel)}
+  details.lang>summary{cursor:pointer;list-style:none;font-family:var(--sans);font-size:14.5px;font-weight:600;
+    padding:10px 14px;display:flex;align-items:center;gap:10px}
+  details.lang>summary::-webkit-details-marker{display:none}
+  details.lang>summary::before{content:"\25B8";color:var(--level);font-size:13px;width:12px}
+  details.lang[open]>summary::before{content:"\25BE"}
+  details.lang>summary:hover{background:var(--level-soft)}
+  details.lang>.lbody{padding:4px 16px 4px}
+  .langbar{display:flex;gap:10px;font-family:var(--sans);font-size:12.5px;margin:0 0 8px}
+  .langbar button{background:none;border:0;color:var(--level);cursor:pointer;padding:0;text-decoration:underline;font-family:inherit;font-size:inherit}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <p class="crumb"><span id="who" class="who"></span><a class="back" href="index.html?v=2026110601">&#8592; Dashboard</a> &middot; SF Knowledge Hub &middot; Secure Coding: Basic to Intermediate</p>
+    <p><span class="chip">Module 5 of 6</span></p>
+    <h1>Injection and cross-site scripting</h1>
+    <p class="deck">Stop user data from changing your database queries, shell commands and web pages, using parameters, safe functions and output encoding.</p>
+    <div class="facts"><div><b>Time</b>About 4 hours</div><div><b>Sections</b>4, each with a finish box</div><div><b>OWASP</b>A05:2025 Injection</div><div><b>Completion</b>All sections, check questions (70%), then the box at the end</div></div>
+  </div>
+</header>
+
+<div class="progress"><div class="wrap">
+  <div class="bar"><span id="fill"></span></div>
+  <div class="count" id="count">Loading progress&hellip;</div>
+</div></div>
+
+<div class="wrap">
+
+<div class="orient">
+<h2>Before you begin</h2>
+<p>Injection is one of the oldest and most damaging kinds of weakness, and it is almost always fixed the same way: keep the command and the data apart. This module covers SQL injection, command injection and cross-site scripting.</p>
+<p>Have Juice Shop ready. You do not need to be signed in.</p>
+</div>
+
+<section class="stage" id="sec-1">
+  <div class="stage-head"><div class="num" id="num-1">1</div><h2>Theory: injection and cross-site scripting</h2></div>
+  <p class="goal">How injection works, its main kinds, and the practices that prevent it.</p>
+  <div class="stage-body">
+
+<h3>What injection is</h3>
+<p><b>Injection</b> happens when data from a user is joined into a command for another system (a database, the operating system, a browser) in a way that lets the data change the command itself. The other system cannot tell which part was written by you and which part was typed by the user.</p>
+<p>For example, this code builds a query by joining text:</p>
+<pre class="code">query = "SELECT * FROM users WHERE email = '" + email + "'"</pre>
+<p>If the user types <code>' OR '1'='1</code> as their email, the query becomes <code>... WHERE email = '' OR '1'='1'</code>, which matches every user.</p>
+<h3>Kinds of injection</h3>
+<table>
+<tr><th>Kind</th><th>Where the data ends up</th><th>Main fix</th></tr>
+<tr><td>SQL injection</td><td>A database query</td><td>Parameterised queries (prepared statements)</td></tr><tr><td>NoSQL injection</td><td>A query object, for example in MongoDB</td><td>Validate types; never pass request objects straight into a query</td></tr><tr><td>OS command injection</td><td>A shell command</td><td>Avoid the shell; pass arguments as a list</td></tr><tr><td>Cross-site scripting (XSS)</td><td>A web page in another user's browser</td><td>Encode output; use safe browser functions such as <code>textContent</code></td></tr>
+</table>
+<h3>Recommended practices</h3>
+<ul>
+<li><b>Keep code and data separate.</b> Use parameterised queries, so the database receives the query and the values separately. This is the main fix for SQL injection, and it also handles legitimate values such as <code>O'Brien</code> correctly.</li>
+<li><b>Use your framework's safe features.</b> ORMs and query builders parameterise for you, unless you use their "raw query" functions with joined text.</li>
+<li><b>Do not run shell commands with user data.</b> If you must run a program, use the function that takes a list of arguments (<code>execFile</code>, <code>subprocess.run([...])</code>, <code>ProcessBuilder</code>), never a single command string.</li>
+<li><b>Validate input as well</b> (Module 1), as a second layer.</li>
+</ul>
+<h3>Cross-site scripting (XSS)</h3>
+<p>XSS is injection into a web page. An attacker gets their script to run in another user's browser, where it can read the page, act as the user, or steal data.</p>
+<ul>
+<li><b>Stored XSS:</b> the script is saved, for example in a product review, and runs for everyone who views it.</li>
+<li><b>Reflected XSS:</b> the script is in a link, and the server copies it into the page.</li>
+<li><b>DOM XSS:</b> the browser's own script copies data, such as the search text, into the page unsafely.</li>
+</ul>
+<p>Fixes: let your template engine encode output (and do not turn it off), use <code>textContent</code> rather than <code>innerHTML</code> in browser code, sanitise with a trusted library such as DOMPurify when you must allow some HTML, and add a Content-Security-Policy (Module 3) as a further layer.</p>
+    <label class="secdone" id="sd-1"><input type="checkbox" class="sec" data-sec="1" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-2">
+  <div class="stage-head"><div class="num" id="num-2">2</div><h2>OWASP mapping</h2></div>
+  <p class="goal">Where these weaknesses sit in the OWASP Top 10:2025, with their CWE numbers.</p>
+  <div class="stage-body">
+
+<p>This module maps to <b>A05:2025 Injection</b>. Cross-site scripting is part of this category.</p>
+<table>
+<tr><th>Weakness</th><th>CWE</th><th>OWASP Top 10:2025</th></tr>
+<tr><td>User data joined into an SQL query</td><td>CWE-89: SQL Injection</td><td>A05 Injection</td></tr><tr><td>User data written into a page without encoding</td><td>CWE-79: Cross-site Scripting</td><td>A05 Injection</td></tr><tr><td>User data joined into a shell command</td><td>CWE-78: OS Command Injection</td><td>A05 Injection</td></tr><tr><td>User data used to build a NoSQL query</td><td>CWE-943: Improper Neutralization of Special Elements in Data Query Logic</td><td>A05 Injection</td></tr>
+</table>
+<h3>How to spot it in a code review</h3>
+<ul>
+<li>A query built with <code>+</code>, string formatting or template strings, with any part from the request.</li>
+<li>"Raw" query functions in an ORM.</li>
+<li><code>innerHTML</code>, <code>outerHTML</code>, <code>document.write</code>, <code>eval</code>, or a template's "unescaped" or "safe" marker used with user data.</li>
+<li><code>exec</code>, <code>system</code>, <code>shell=True</code> or <code>cmd /c</code> with user data.</li>
+</ul>
+<div class="callout caution"><span class="tag">Watch out</span><p>Escaping quotes by hand, or removing words like <code>SELECT</code> from input, is not a fix. Attackers know many ways round such filters. Use parameters.</p></div>
+    <label class="secdone" id="sd-2"><input type="checkbox" class="sec" data-sec="2" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-3">
+  <div class="stage-head"><div class="num" id="num-3">3</div><h2>Fixes: parameters and safe output</h2></div>
+  <p class="goal">The same lookup with the weakness and fixed, in each language, and the browser fix for DOM XSS.</p>
+  <div class="stage-body">
+
+<p>The server-side examples look up a user by email address. The fix in every language is a parameterised query: the query text has a placeholder, and the value is sent separately. The browser example shows the matching fix for DOM XSS.</p>
+<div class="langbar"><button type="button" data-lang="open">Expand all</button><button type="button" data-lang="close">Collapse all</button></div>
+<details class="lang"><summary>Node.js</summary><div class="lbody">
+<p>The pg library for PostgreSQL. <code>$1</code> is a placeholder for the first value.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">const result = await pool.query(
+  "SELECT id, name FROM users WHERE email = '" + req.body.email + "'"
+);</pre>
+<p class="fname">Fixed</p>
+<pre class="code">const result = await pool.query(
+  "SELECT id, name FROM users WHERE email = $1",
+  [req.body.email]                  <span class="c">// sent separately from the query</span>
+);</pre>
+</div></details>
+<details class="lang"><summary>JavaScript (browser)</summary><div class="lbody">
+<p>DOM XSS: the search text is written into the page as HTML.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">const q = new URLSearchParams(location.search).get("q");
+results.innerHTML = "You searched for: " + q;   <span class="c">// q can contain &lt;img onerror=...&gt;</span></pre>
+<p class="fname">Fixed</p>
+<pre class="code">const q = new URLSearchParams(location.search).get("q");
+results.textContent = "You searched for: " + q; <span class="c">// shown as text, never run</span></pre>
+</div></details>
+<details class="lang"><summary>TypeScript</summary><div class="lbody">
+<p>The same with a query builder. Template strings are still joined text unless the library treats them as parameters.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">const rows = await db.raw(`SELECT id, name FROM users WHERE email = '${email}'`);</pre>
+<p class="fname">Fixed</p>
+<pre class="code">const rows = await db("users").select("id", "name").where({ email });   <span class="c">// parameterised</span>
+<span class="c">// or, with raw SQL:</span>
+const rows2 = await db.raw("SELECT id, name FROM users WHERE email = ?", [email]);</pre>
+</div></details>
+<details class="lang"><summary>Python</summary><div class="lbody">
+<p>sqlite3 and most other database drivers take the values as a separate argument.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">cur.execute(f"SELECT id, name FROM users WHERE email = '{email}'")
+subprocess.run(f"ping -c 1 {host}", shell=True)           <span class="c"># command injection</span></pre>
+<p class="fname">Fixed</p>
+<pre class="code">cur.execute("SELECT id, name FROM users WHERE email = ?", (email,))
+subprocess.run(["ping", "-c", "1", host], check=True)    <span class="c"># no shell, argument list</span></pre>
+</div></details>
+<details class="lang"><summary>Java</summary><div class="lbody">
+<p>JDBC <code>PreparedStatement</code>. JPA and Spring Data parameterise for you, except in native queries built with joined text.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">Statement st = conn.createStatement();
+ResultSet rs = st.executeQuery(
+    "SELECT id, name FROM users WHERE email = '" + email + "'");</pre>
+<p class="fname">Fixed</p>
+<pre class="code">PreparedStatement ps = conn.prepareStatement(
+    "SELECT id, name FROM users WHERE email = ?");
+ps.setString(1, email);
+ResultSet rs = ps.executeQuery();</pre>
+</div></details>
+<details class="lang"><summary>C#</summary><div class="lbody">
+<p>ADO.NET parameters. Entity Framework Core is safe with LINQ and with <code>FromSql</code>, but not with <code>FromSqlRaw</code> and joined text.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">var cmd = new SqlCommand(
+    "SELECT Id, Name FROM Users WHERE Email = '" + email + "'", conn);</pre>
+<p class="fname">Fixed</p>
+<pre class="code">var cmd = new SqlCommand("SELECT Id, Name FROM Users WHERE Email = @email", conn);
+cmd.Parameters.AddWithValue("@email", email);
+
+<span class="c">// Entity Framework Core</span>
+var users = db.Users.Where(u =&gt; u.Email == email).ToList();</pre>
+</div></details><div class="callout good"><span class="tag">Recommended practice</span><ul>
+<li>Use parameters for every value, even ones you think are safe, such as numbers from your own code.</li>
+<li>Table and column names cannot be parameters. If they must vary, pick them from a fixed allow-list in your code.</li>
+<li>Give the database account only the rights it needs (Module 1, least privilege), so a successful injection can do less.</li>
+</ul></div>
+    <label class="secdone" id="sd-3"><input type="checkbox" class="sec" data-sec="3" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-4">
+  <div class="stage-head"><div class="num" id="num-4">4</div><h2>Lab: inject into Juice Shop, then fix a query</h2></div>
+  <p class="goal">Part A: Login Admin and DOM XSS in Juice Shop. Part B: a parameterised query in your language.</p>
+  <div class="stage-body">
+
+<h3>Part A: SQL injection and DOM XSS in Juice Shop</h3>
+<p>Start Juice Shop on <code>127.0.0.1</code>. Sign out if you are signed in.</p>
+<p><b>1. Sign in as the administrator without a password.</b></p>
+<ol>
+<li>Open the <b>Login</b> page.</li>
+<li>In the email field, type <code>' OR 1=1--</code>. Type anything in the password field, and select <b>Log in</b>.</li>
+</ol>
+<p>You are signed in as the first user in the database, the administrator, and Juice Shop shows a banner for the <b>Login Admin</b> challenge. The <code>--</code> turns the rest of the query, including the password check, into a comment.</p>
+<p><b>2. Run a script through the search box.</b></p>
+<ol>
+<li>Paste this into the search box at the top of the page and press Enter:</li>
+</ol>
+<pre class="code">&lt;iframe src="javascript:alert(`xss`)"&gt;</pre>
+<p>An alert appears, and Juice Shop shows a banner for the <b>DOM XSS</b> challenge. The page's own script put your search text into the page as HTML.</p>
+
+<h3>Part B: fix the query in your language</h3>
+<p>Each starter creates a small in-memory database with two users and looks users up by email, joining the email into the query text. Run it first and note the output. Then fix <code>findUser</code> so that it uses a parameter.</p>
+<table>
+<tr><th>Input</th><th>Email typed</th><th>Before the fix</th><th>After the fix</th></tr>
+<tr><td>1</td><td><code>alice@example.com</code></td><td>1 row(s)</td><td>1 row(s)</td></tr><tr><td>2</td><td><code>o'brien@example.com</code></td><td>error (the quote breaks the query)</td><td>1 row(s)</td></tr><tr><td>3</td><td><code>' OR '1'='1</code></td><td>2 row(s)</td><td>0 row(s)</td></tr><tr><td>4</td><td><code>x' UNION SELECT email, role FROM users --</code></td><td>2 row(s)</td><td>0 row(s)</td></tr>
+</table>
+<p>Input 2 shows that parameters also fix a real bug for genuine users with an apostrophe in their email or name. If you work in browser JavaScript, do the <b>JavaScript (browser)</b> block, which practises the XSS fix instead.</p>
+<div class="langbar"><button type="button" data-lang="open">Expand all</button><button type="button" data-lang="close">Collapse all</button></div>
+<details class="lang"><summary>Node.js</summary><div class="lbody">
+<pre class="code term">mkdir sc-m5-node &amp;&amp; cd sc-m5-node
+npm init -y
+npm install better-sqlite3</pre><p class="fname">find.mjs</p><pre class="code">import Database from "better-sqlite3";
+
+const db = new Database(":memory:");
+db.exec("CREATE TABLE users (email TEXT, name TEXT, role TEXT)");
+const add = db.prepare("INSERT INTO users VALUES (?, ?, ?)");
+add.run("alice@example.com", "Alice", "admin");
+add.run("o'brien@example.com", "Pat O'Brien", "customer");
+
+<span class="c">// TODO: use a ? placeholder and pass email separately</span>
+function findUser(email) {
+  return db.prepare("SELECT email, name FROM users WHERE email = '" + email + "'").all();
+}
+
+const inputs = [
+  "alice@example.com",
+  "o'brien@example.com",
+  "' OR '1'='1",
+  "x' UNION SELECT email, role FROM users --",
+];
+
+inputs.forEach((email, i) =&gt; {
+  try {
+    console.log(i + 1, findUser(email).length + " row(s)");
+  } catch (e) {
+    console.log(i + 1, "error: " + e.message);
+  }
+});</pre><pre class="code term">node find.mjs</pre>
+</div></details>
+<details class="lang"><summary>JavaScript (browser)</summary><div class="lbody">
+<p>This part practises the DOM XSS fix. Save the file and open it in your browser.</p><p class="fname">search.html</p><pre class="code">&lt;!doctype html&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;input id="q" placeholder="Search" size="40"&gt; &lt;button id="go"&gt;Search&lt;/button&gt;
+&lt;p id="out"&gt;&lt;/p&gt;
+&lt;script&gt;
+  document.getElementById("go").onclick = () =&gt; {
+    const q = document.getElementById("q").value;
+    <span class="c">// TODO: show the search text without letting the browser treat it as HTML</span>
+    document.getElementById("out").innerHTML = "You searched for: " + q;
+  };
+&lt;/script&gt;</pre><p>Search for <code>&lt;img src=x onerror="alert('xss')"&gt;</code>. Before your fix, an alert appears. After your fix, the text is shown exactly as typed.</p>
+</div></details>
+<details class="lang"><summary>TypeScript</summary><div class="lbody">
+<pre class="code term">mkdir sc-m5-ts &amp;&amp; cd sc-m5-ts
+npm init -y
+npm install better-sqlite3
+npm install --save-dev typescript tsx @types/better-sqlite3</pre><p class="fname">find.ts</p><pre class="code">import Database from "better-sqlite3";
+
+const db = new Database(":memory:");
+db.exec("CREATE TABLE users (email TEXT, name TEXT, role TEXT)");
+const add = db.prepare("INSERT INTO users VALUES (?, ?, ?)");
+add.run("alice@example.com", "Alice", "admin");
+add.run("o'brien@example.com", "Pat O'Brien", "customer");
+
+<span class="c">// TODO: use a ? placeholder and pass email separately</span>
+function findUser(email: string): unknown[] {
+  return db.prepare("SELECT email, name FROM users WHERE email = '" + email + "'").all();
+}
+
+const inputs = [
+  "alice@example.com",
+  "o'brien@example.com",
+  "' OR '1'='1",
+  "x' UNION SELECT email, role FROM users --",
+];
+
+inputs.forEach((email, i) =&gt; {
+  try {
+    console.log(i + 1, findUser(email).length + " row(s)");
+  } catch (e) {
+    console.log(i + 1, "error: " + (e as Error).message);
+  }
+});</pre><pre class="code term">npx tsx find.ts</pre>
+</div></details>
+<details class="lang"><summary>Python</summary><div class="lbody">
+<p>Python includes SQLite, so no install is needed.</p><p class="fname">find.py</p><pre class="code">import sqlite3
+
+db = sqlite3.connect(":memory:")
+db.execute("CREATE TABLE users (email TEXT, name TEXT, role TEXT)")
+db.executemany("INSERT INTO users VALUES (?, ?, ?)", [
+    ("alice@example.com", "Alice", "admin"),
+    ("o'brien@example.com", "Pat O'Brien", "customer"),
+])
+
+<span class="c"># TODO: use a ? placeholder and pass email separately</span>
+def find_user(email):
+    return db.execute("SELECT email, name FROM users WHERE email = '" + email + "'").fetchall()
+
+INPUTS = [
+    "alice@example.com",
+    "o'brien@example.com",
+    "' OR '1'='1",
+    "x' UNION SELECT email, role FROM users --",
+]
+
+for i, email in enumerate(INPUTS, 1):
+    try:
+        print(i, len(find_user(email)), "row(s)")
+    except sqlite3.Error as e:
+        print(i, "error:", e)</pre><pre class="code term">python3 find.py</pre>
+</div></details>
+<details class="lang"><summary>Java</summary><div class="lbody">
+<p>This starter uses the H2 in-memory database. Download <code>h2-2.2.224.jar</code> from <a href="https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/" target="_blank" rel="noopener">Maven Central</a> into the same folder.</p><p class="fname">FindUser.java</p><pre class="code">import java.sql.*;
+
+public class FindUser {
+    <span class="c">// TODO: use a PreparedStatement with a ? parameter</span>
+    static int findUser(Connection db, String email) throws SQLException {
+        try (Statement st = db.createStatement();
+             ResultSet rs = st.executeQuery("SELECT email, name FROM users WHERE email = '" + email + "'")) {
+            int n = 0;
+            while (rs.next()) n++;
+            return n;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        try (Connection db = DriverManager.getConnection("jdbc:h2:mem:lab")) {
+            try (Statement st = db.createStatement()) {
+                st.execute("CREATE TABLE users (email VARCHAR(100), name VARCHAR(100), role VARCHAR(20))");
+                st.execute("INSERT INTO users VALUES ('alice@example.com', 'Alice', 'admin'), "
+                         + "('o''brien@example.com', 'Pat O''Brien', 'customer')");
+            }
+            String[] inputs = {
+                "alice@example.com",
+                "o'brien@example.com",
+                "' OR '1'='1",
+                "x' UNION SELECT email, role FROM users --"
+            };
+            for (int i = 0; i &lt; inputs.length; i++) {
+                try {
+                    System.out.println((i + 1) + " " + findUser(db, inputs[i]) + " row(s)");
+                } catch (SQLException e) {
+                    System.out.println((i + 1) + " error: " + e.getMessage().split("\n")[0]);
+                }
+            }
+        }
+    }
+}</pre><pre class="code term">java -cp h2-2.2.224.jar FindUser.java</pre>
+</div></details>
+<details class="lang"><summary>C#</summary><div class="lbody">
+<pre class="code term">dotnet new console -o sc-m5-cs
+cd sc-m5-cs
+dotnet add package Microsoft.Data.Sqlite</pre><p class="fname">Program.cs</p><pre class="code">using Microsoft.Data.Sqlite;
+
+using var db = new SqliteConnection("Data Source=:memory:");
+db.Open();
+var setup = db.CreateCommand();
+setup.CommandText = "CREATE TABLE users (email TEXT, name TEXT, role TEXT);" +
+    "INSERT INTO users VALUES ('alice@example.com', 'Alice', 'admin'), ('o''brien@example.com', 'Pat O''Brien', 'customer');";
+setup.ExecuteNonQuery();
+
+string[] inputs =
+{
+    "alice@example.com",
+    "o'brien@example.com",
+    "' OR '1'='1",
+    "x' UNION SELECT email, role FROM users --"
+};
+
+for (int i = 0; i &lt; inputs.Length; i++)
+{
+    try { Console.WriteLine($"{i + 1} {FindUser(inputs[i])} row(s)"); }
+    catch (SqliteException e) { Console.WriteLine($"{i + 1} error: {e.Message}"); }
+}
+
+<span class="c">// TODO: use a $email parameter instead of joining the text</span>
+int FindUser(string email)
+{
+    var cmd = db.CreateCommand();
+    cmd.CommandText = "SELECT email, name FROM users WHERE email = '" + email + "'";
+    using var r = cmd.ExecuteReader();
+    int n = 0;
+    while (r.Read()) n++;
+    return n;
+}</pre><pre class="code term">dotnet run</pre>
+</div></details><div class="callout verify"><span class="tag">Check your work</span><ul><li>Juice Shop showed the Login Admin and DOM XSS banners</li><li>Your program prints 1, 1, 0 and 0 rows, with no error, or your search page shows the image tag as plain text</li><li>Juice Shop is stopped</li></ul></div>
+    <label class="secdone" id="sd-4"><input type="checkbox" class="sec" data-sec="4" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage check">
+  <div class="stage-head"><div class="num">?</div><h2>Check your understanding</h2></div>
+  <p class="goal">Answer at least 4 of the 5 questions correctly (70%) to unlock the completion box. You can try as many times as you need.</p>
+  <div class="stage-body">
+    <div class="gq" data-i="0">
+      <p class="gstem">1. What is the main fix for SQL injection?</p>
+      <label class="gopt"><input type="radio" name="g0" value="0"> <span>Remove quotes and words like SELECT from user input</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="1"> <span>Use parameterised queries, so values are sent separately from the query</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="2"> <span>Encode the input with Base64 before using it in the query</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="3"> <span>Limit email fields to 50 characters</span></label>
+      <div class="gfb" id="gfb-0"></div>
+    </div>
+    <div class="gq" data-i="1">
+      <p class="gstem">2. A product review is saved and shown to every visitor. An attacker writes a review that contains a script, and it runs in other users' browsers. What kind of attack is this?</p>
+      <label class="gopt"><input type="radio" name="g1" value="0"> <span>Reflected XSS</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="1"> <span>Stored XSS</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="2"> <span>SQL injection</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="3"> <span>Server-side request forgery</span></label>
+      <div class="gfb" id="gfb-1"></div>
+    </div>
+    <div class="gq" data-i="2">
+      <p class="gstem">3. In browser code, which is the safe way to show text that a user typed?</p>
+      <label class="gopt"><input type="radio" name="g2" value="0"> <span>element.innerHTML = text</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="1"> <span>document.write(text)</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="2"> <span>element.textContent = text</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="3"> <span>eval(text)</span></label>
+      <div class="gfb" id="gfb-2"></div>
+    </div>
+    <div class="gq" data-i="3">
+      <p class="gstem">4. Your app runs a command to check whether a host name responds. Which approach avoids command injection?</p>
+      <label class="gopt"><input type="radio" name="g3" value="0"> <span>Run "ping " + host through the shell</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="1"> <span>Remove semicolons from host, then run it through the shell</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="2"> <span>Validate host against a strict pattern, and run ping with an argument list and no shell</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="3"> <span>Run the command as the administrator account</span></label>
+      <div class="gfb" id="gfb-3"></div>
+    </div>
+    <div class="gq" data-i="4">
+      <p class="gstem">5. In the OWASP Top 10:2025, which category includes cross-site scripting?</p>
+      <label class="gopt"><input type="radio" name="g4" value="0"> <span>A05 Injection</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="1"> <span>A01 Broken Access Control</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="2"> <span>A06 Insecure Design</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="3"> <span>A07 Authentication Failures</span></label>
+      <div class="gfb" id="gfb-4"></div>
+    </div>
+    <div class="gactions"><button class="pbtn" id="gcheck">Check answers</button><span class="gstate" id="gstate"></span></div>
+    <p class="recap"><b>Module recap.</b> Keep commands and data apart: parameterised queries for databases, argument lists for programs, and encoded output or textContent for web pages. Treat raw-query and innerHTML features as warnings in code review.</p>
+  </div>
+</section>
+
+<div class="done">
+  <span class="tag">Completion</span>
+  <label id="lbl"><input type="checkbox" id="cmplt" disabled> I have finished Module 5: Injection and cross-site scripting.</label>
+  <p class="sync" id="sync"></p>
+</div>
+
+<div class="pager">
+  <a class="pbtn ghost" href="sc1-m4.html?v=2026110601">&#8592; Module 4</a>
+  <a class="pbtn off" id="nextbtn" href="sc1-m6.html?v=2026110601">Module 6 &#8594;</a>
+</div>
+
+<footer>
+  <div>SF Knowledge Hub &middot; Secure Coding: Basic to Intermediate &middot; Module 5 of 6</div>
+  <div>build 2026110601</div>
+</footer>
+
+</div>
+<!-- SF auth gate: Google SSO or email/password sign-in. -->
+<script>
+(function () {
+  /* Live config for sfcertification-grafana. */
+  const firebaseConfig = {
+    apiKey: "__FIREBASE_API_KEY__",
+    authDomain: "sfcertification-grafana.firebaseapp.com",
+    projectId: "sfcertification-grafana",
+    storageBucket: "sfcertification-grafana.firebasestorage.app",
+    messagingSenderId: "227322696511",
+    appId: "1:227322696511:web:12e7ced7dd3d45fa06798a"
+  };
+  const ALLOWED_DOMAIN = "sourcefuse.com";
+  /* Admins: always allowed in, without a nomination. */
+  const ADMINS = ["jv.ravichandran@sourcefuse.com", "noushin.khan@sourcefuse.com"];
+
+  /* `courses` document id for this course. Nominations are read from
+     courses/{COURSE_ID}/nominations/{email}, managed in the SF Knowledge Hub. */
+  const COURSE_ID = "__SC1_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  /* True when the page is shown inside another page (the SF Knowledge Hub). */
+  const IN_FRAME = (function(){ try { return window.self !== window.top; } catch (_) { return true; } })();
+
+  let auth, GoogleProvider, signInPopup, signInEmail, onAuth, signOutFn, setPersist, localPersist, readNomination;
+  let readyCb = null;
+
+  async function initFirebase() {
+    const appMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const authMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+    const app = appMod.getApps().length ? appMod.getApp() : appMod.initializeApp(firebaseConfig);
+    auth = authMod.getAuth(app);
+    GoogleProvider = authMod.GoogleAuthProvider;
+    signInPopup    = (p) => authMod.signInWithPopup(auth, p);
+    signInEmail    = (e, pw) => authMod.signInWithEmailAndPassword(auth, e, pw);
+    onAuth         = (cb) => authMod.onAuthStateChanged(auth, cb);
+    signOutFn      = () => authMod.signOut(auth);
+    setPersist     = authMod.setPersistence;
+    localPersist   = authMod.browserLocalPersistence;
+    try { await setPersist(auth, localPersist); } catch (_) {}
+    const fsMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+    const db = fsMod.getFirestore(app);
+    readNomination = (email) => fsMod.getDoc(fsMod.doc(db, "courses", COURSE_ID, "nominations", email));
+  }
+
+  function styleTag(){return `<style>
+    .sf-auth-backdrop{position:fixed;inset:0;background:rgba(16,38,60,.55);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+    .sf-auth-card{background:#fff;border-radius:22px;padding:42px 36px 38px;width:100%;max-width:420px;box-shadow:0 12px 40px rgba(10,30,55,.25);text-align:center;font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    .sf-auth-badge{display:inline-block;background:var(--level,#1a6eb5);color:#fff;font-weight:700;font-size:12px;padding:4px 11px;border-radius:14px;margin-bottom:14px}
+    .sf-auth-card h2{margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.3;color:#15212d;font-family:inherit}
+    .sf-auth-sub{margin:0 auto 26px;max-width:330px;color:#5e6b79;font-size:14.5px;line-height:1.6}
+    .sf-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#366db0;color:#fff;border:0;border-radius:9px;padding:15px;font-size:15.5px;font-weight:600;cursor:pointer;font-family:inherit}
+    .sf-btn:hover{background:#2e5f9b}
+    .sf-btn svg{width:19px;height:19px;flex:none}
+    .sf-or{margin:20px 0;color:#9da7b2;font-size:11.5px;font-weight:500;letter-spacing:.14em}
+    .sf-inp{display:block;width:100%;box-sizing:border-box;border:1.5px solid #dfe5eb;border-radius:9px;padding:13px 14px;font-size:15px;margin:0 0 9px;color:#15212d;background:#fff;font-family:inherit}
+    .sf-inp::placeholder{color:#757575}
+    .sf-inp:focus{outline:none;border-color:#366db0}
+    .sf-err{color:#b5341a;font-size:13px;margin-top:12px;min-height:16px;line-height:1.5}
+    .sf-frame{color:#5e6b79;font-size:12.5px;line-height:1.55;margin:14px 0 0}
+    .sf-frame a{color:#366db0}
+  </style>`;}
+
+  function signinHTML(){return `
+    <div class="sf-auth-backdrop" id="sf-auth"><div class="sf-auth-card">
+      <h2>Secure Coding: Basic to Intermediate</h2>
+      <p class="sf-auth-sub">Sign in with your SourceFuse Google account to access the course and save your progress.</p>
+      <button class="sf-btn" id="sf-google" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.35 11.1H12v3.2h5.35c-.5 2.5-2.6 3.9-5.35 3.9a6.2 6.2 0 1 1 4.1-10.85l2.4-2.4A9.6 9.6 0 1 0 12 21.6c5 0 9.6-3.6 9.6-9.6 0-.3 0-.6-.05-.9z"/></svg> Sign in with Google</button>
+      <div class="sf-or">OR</div>
+      <input class="sf-inp" id="sf-email" type="email" placeholder="you@sourcefuse.com" autocomplete="username">
+      <input class="sf-inp" id="sf-pass" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="sf-btn" id="sf-email-btn" type="button">Sign in with email</button>
+      <div class="sf-err" id="sf-err"></div>
+      ${IN_FRAME ? '<p class="sf-frame">If the Google sign-in window does not open, <a href="' + location.href + '" target="_blank" rel="noopener">open the course in a new tab</a>, or use Sign in with email.</p>' : ''}
+    </div></div>`;}
+
+  function fail(m){ const e = document.getElementById("sf-err"); if (e) e.textContent = m; }
+  function validDomain(x){
+    if (typeof x !== "string") return false;
+    return x.toLowerCase().endsWith("@" + ALLOWED_DOMAIN);
+  }
+  /* Same check as the SF Knowledge Hub: this course's nominations document
+     for the email exists and is not marked nominated: false. */
+  async function isNominated(x){
+    if (typeof x !== "string") return false;
+    if (ADMINS.indexOf(x.toLowerCase()) !== -1) return true;
+    if (!readNomination) return false;
+    try {
+      const s = await readNomination(x.toLowerCase());
+      return s.exists() && s.data().nominated !== false;
+    } catch (e) {
+      console.log("[auth] nomination read failed:", e && e.message);
+      return false;
+    }
+  }
+  function showNotNominated(){
+    const card = document.getElementById("sf-auth");
+    if (!card) return;
+    card.style.display = "flex";
+    card.innerHTML = '<div class="sf-auth-card">'
+      + '<div class="sf-auth-badge">SF Knowledge Hub</div>'
+      + '<h2>You are not nominated to this course</h2>'
+      + '</div>';
+  }
+  function proceed(user){
+    const el = document.getElementById("sf-auth"); if (el) el.remove();
+    if (readyCb) readyCb(user, signOutFn);
+  }
+
+  function wireSignin(){
+    document.getElementById("sf-google").addEventListener("click", async () => {
+      fail("");
+      if (!signInPopup) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const p = new GoogleProvider();
+      p.setCustomParameters({ hd: ALLOWED_DOMAIN });
+      try {
+        const r = await signInPopup(p);
+        const u = r && r.user;
+        const email = (u && u.email) || "";
+        if (!validDomain(email)) {
+          await signOutFn();
+          return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+        }
+        if (!(await isNominated(email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithPopup failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/popup-blocked")
+          return fail(IN_FRAME
+            ? "The sign-in window was blocked here. Open the course in a new tab using the link below, or use Sign in with email."
+            : "Your browser blocked the sign-in window. Allow pop-ups for this site, then try again.");
+        if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request")
+          return fail("Sign-in was closed before it finished. Try again.");
+        fail("Google sign-in couldn't complete. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+    document.getElementById("sf-email-btn").addEventListener("click", async () => {
+      fail("");
+      if (!signInEmail) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const email = (document.getElementById("sf-email").value || "").trim().toLowerCase();
+      const pass  = document.getElementById("sf-pass").value || "";
+      if (!email || !pass) return fail("Enter your email and password.");
+      if (!validDomain(email)) return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      try {
+        const r = await signInEmail(email, pass);
+        const u = r && r.user;
+        if (!(await isNominated((u && u.email) || email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithEmailAndPassword failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found")
+          return fail("Incorrect email or password.");
+        fail("Sign-in failed. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+  }
+
+  async function mount(onReady){
+    readyCb = onReady;
+    document.head.insertAdjacentHTML("beforeend", styleTag());
+    document.body.insertAdjacentHTML("beforeend", signinHTML());
+    /* Hidden until onAuth reports no session. A signed-in nominated user
+       goes straight through without the overlay appearing at all. */
+    const authCard = document.getElementById("sf-auth");
+    if (authCard) authCard.style.display = "none";
+    try { await initFirebase(); }
+    catch (e) {
+      console.log("[auth] init failed:", e && e.message);
+      if (authCard) authCard.style.display = "flex";
+      fail("Sign-in service didn't load. Reload the page.");
+      return;
+    }
+    if (onAuth) onAuth(async (u) => {
+      if (!u) {
+        if (authCard) authCard.style.display = "flex";
+        return;
+      }
+      if (!validDomain(u.email)) {
+        await signOutFn();
+        if (authCard) authCard.style.display = "flex";
+        return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      }
+      /* Signed in and on-domain, but not on the list. Do not sign them out
+         automatically: the session is shared with the SF Knowledge Hub and
+         dropping it would sign them out of the Hub too. */
+      if (!(await isNominated(u.email))) return showNotNominated();
+      proceed(u);
+    });
+    wireSignin();
+  }
+
+  window.SFAuth = { mount: mount };
+})();
+</script>
+
+<!-- Progress: localStorage written first, Firestore synced after. -->
+<script type="module">
+(function(){
+  /* `courses` document id for this course. Same value in every file of this course. */
+  var CP_COURSE_ID = "__SC1_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  var MODULE_KEYS = ["sc1-m0", "sc1-m1", "sc1-m2", "sc1-m3", "sc1-m4", "sc1-m5", "sc1-m6"];
+  var SECTION_TOTALS = {"sc1-m0": 4, "sc1-m1": 4, "sc1-m2": 4, "sc1-m3": 4, "sc1-m4": 4, "sc1-m5": 4, "sc1-m6": 4};   /* sections per module */
+  var FB = "https://www.gstatic.com/firebasejs/10.12.2/";
+  var LS  = "sf-sc1:";                       /* module completion, final test summary */
+  var LSS = "sf-sc1-sec:";                   /* section ticks */
+  var GK  = "sf-sc1-gate:";                  /* check-question gate */
+
+  var fs = null, db = null, cpRef = null, prRef = null, erRef = null,
+      user = null, courseObj = {}, examObj = null, ready = false;
+
+  function stamp(){
+    var p = function(n){ return String(n).padStart(2,"0"); };
+    var d = new Date();
+    return { date: d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()),
+             time: p(d.getHours())+":"+p(d.getMinutes())+":"+p(d.getSeconds()) };
+  }
+  /* Legacy progress/{uid} field for a module: sc1-m1 -> sc1_m1 */
+  function secField(mk){ return mk.replace(/-/g, "_"); }
+
+  /* ---- localStorage layer ---------------------------------------------- */
+  function jRead(k){ try { return JSON.parse(localStorage.getItem(k) || "{}"); } catch(_) { return {}; } }
+  function jWrite(k, o){ try { localStorage.setItem(k, JSON.stringify(o)); } catch(_) {} }
+  function lsRead(){ return jRead(LS + user.uid); }
+  function lsWrite(o){ jWrite(LS + user.uid, o); }
+  function secRead(){ return jRead(LSS + user.uid); }
+  function secWrite(o){ jWrite(LSS + user.uid, o); }
+
+  function state(){
+    var o = lsRead();
+    return { modules: o.modules || {}, exam: o.exam || null, sections: secRead() };
+  }
+  function lsSetModule(mk, done){
+    var o = lsRead();
+    o.modules = o.modules || {};
+    if (done) { var t = stamp(); o.modules[mk] = { completedOn: t.date, completedAt: t.time }; }
+    else delete o.modules[mk];
+    lsWrite(o);
+    return state();
+  }
+  function isDone(st, mk){
+    var m = (st && st.modules || {})[mk];
+    return !!(m && m.completedOn);
+  }
+  function sectionsDone(st, mk){
+    var a = ((st && st.sections) || {})[mk] || [];
+    return a.length;
+  }
+
+  /* ---- Firestore layer --------------------------------------------------- */
+  function base(){ return { email: user.email, name: user.displayName || user.email, courses: {} }; }
+
+  function setModuleInProgress(mk){
+    if (!ready || !mk) return Promise.resolve();
+    if (courseObj.courseCompletedOn) return Promise.resolve();
+    if (isDone(courseObj, mk)) return Promise.resolve();
+    var needStart = !courseObj.courseStartedOn;
+    if (courseObj.moduleInProgress === mk && !needStart) return Promise.resolve();
+    var t = stamp();
+    var cu = { moduleInProgress: mk };
+    if (needStart) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+    var update = base(); update.courses[CP_COURSE_ID] = cu;
+    courseObj.moduleInProgress = mk;
+    if (needStart) courseObj.courseStartedOn = t.date;
+    return fs.setDoc(cpRef, update, { merge: true })
+      .catch(function(e){ console.error("[progress] moduleInProgress write failed", e); });
+  }
+
+  /* Read-then-merge completion write. */
+  function completeModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    var t = stamp();
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      if (!obj.courseStartedOn) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+      if (!(existing[mk] && existing[mk].completedOn)) cu.modules[mk] = { completedOn: t.date, completedAt: t.time };
+      var doneAfter = function(k){ return !!((existing[k] && existing[k].completedOn) || cu.modules[k]); };
+      if (MODULE_KEYS.every(doneAfter)) {
+        if (!obj.courseCompletedOn) { cu.courseCompletedOn = t.date; cu.courseCompletedAt = t.time; }
+        cu.moduleInProgress = null;
+      } else {
+        var next = null;
+        for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+        cu.moduleInProgress = next;
+      }
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      courseObj = Object.assign({}, obj, cu, { modules: Object.assign({}, existing, cu.modules) });
+      return fs.setDoc(cpRef, update, { merge: true });
+    });
+  }
+
+  /* Section tick: localStorage first, then progress/{uid}.sc1_mN (arrayUnion). */
+  function tickSection(mk, n){
+    var s = secRead();
+    var a = s[mk] || [];
+    if (a.indexOf(n) === -1) { a.push(n); a.sort(function(x,y){ return x-y; }); }
+    s[mk] = a; secWrite(s);
+    if (!ready) return Promise.reject(new Error("offline"));
+    var upd = {}; upd[secField(mk)] = fs.arrayUnion(n);
+    return fs.setDoc(prRef, upd, { merge: true });
+  }
+
+  /* Final test attempt: one attempt document in courseExamResults + best-attempt summary in examResults. */
+  function recordExam(r){
+    var t = stamp();
+    var o = lsRead();
+    var prev = o.exam || {};
+    var attempts = Math.max(prev.attempts || 0, (examObj && examObj.attempts) || 0, r.attemptNumber);
+    var bestPassed = !!(prev.passed || (examObj && examObj.passed) || r.pass);
+    var bestPct = Math.max(prev.score || 0, (examObj && examObj.score) || 0, r.pct);
+    o.exam = { attempts: attempts, passed: bestPassed, score: bestPct, lastPct: r.pct, lastPass: r.pass,
+               submittedOn: t.date, submittedAt: t.time };
+    lsWrite(o);
+    if (!ready) return Promise.reject(new Error("offline"));
+
+    var attemptId = t.date + "_" + t.time.replace(/:/g, "");
+    var aRef = fs.doc(db, "courseExamResults", user.email, "courses", CP_COURSE_ID, "attempts", attemptId);
+    var body = {
+      email: user.email, name: user.displayName || user.email, courseId: CP_COURSE_ID,
+      attemptNumber: r.attemptNumber, correct: r.correct, total: r.total, pct: r.pct, pass: r.pass,
+      submittedAt: new Date().toISOString(), durationSeconds: r.durationSeconds, timeUp: r.timeUp,
+      detail: r.detail
+    };
+    return fs.setDoc(aRef, body).then(function(){
+      return fs.getDoc(erRef);
+    }).then(function(snap){
+      var cur = (snap.exists() ? (snap.data() || {})[CP_COURSE_ID] : null) || {};
+      var better = !cur.passed && (r.pass || (r.pct >= (cur.score || 0)));
+      var summary = {
+        attempts: Math.max((cur.attempts || 0) + 1, r.attemptNumber),
+        correct: better ? r.correct : cur.correct,
+        total: better ? r.total : cur.total,
+        score: better ? r.pct : cur.score,
+        passed: !!(cur.passed || r.pass),
+        timeTaken: better ? r.durationSeconds : cur.timeTaken,
+        timedOut: better ? r.timeUp : cur.timedOut,
+        submittedAt: better ? new Date().toISOString() : cur.submittedAt
+      };
+      examObj = summary;
+      var upd = { learnerEmail: user.email, learnerName: user.displayName || user.email };
+      upd[CP_COURSE_ID] = summary;
+      return fs.setDoc(erRef, upd, { merge: true });
+    });
+  }
+
+  /* ---- Boot ------------------------------------------------------------ */
+  async function start(u, moduleKey, onState){
+    user = u;
+    var local = state();
+    onState(local, false);                       /* paint from localStorage at once */
+    try {
+      var appMod  = await import(FB + "firebase-app.js");
+      fs          = await import(FB + "firebase-firestore.js");
+      var app = appMod.getApp();                 /* DEFAULT app, never a named one */
+      db    = fs.getFirestore(app);
+      cpRef = fs.doc(db, "courseProgress", user.uid);
+      prRef = fs.doc(db, "progress", user.uid);
+      erRef = fs.doc(db, "examResults", user.uid);
+
+      var cs = await fs.getDoc(cpRef);
+      if (cs.exists()) courseObj = ((cs.data() || {}).courses || {})[CP_COURSE_ID] || {};
+      var remoteSec = {};
+      try {
+        var ps = await fs.getDoc(prRef);
+        var pd = ps.exists() ? (ps.data() || {}) : {};
+        MODULE_KEYS.forEach(function(k){ if (Array.isArray(pd[secField(k)])) remoteSec[k] = pd[secField(k)]; });
+      } catch(e){ console.error("[progress] section read failed", e); }
+      try {
+        var es = await fs.getDoc(erRef);
+        examObj = es.exists() ? ((es.data() || {})[CP_COURSE_ID] || null) : null;
+      } catch(e){ console.error("[progress] exam read failed", e); }
+      ready = true;
+
+      /* Merge: anything complete in either store stays complete. */
+      var o = lsRead();
+      o.modules = Object.assign({}, local.modules || {}, courseObj.modules || {});
+      if (examObj) {
+        var le = o.exam || {};
+        o.exam = { attempts: Math.max(le.attempts || 0, examObj.attempts || 0),
+                   passed: !!(le.passed || examObj.passed),
+                   score: Math.max(le.score || 0, examObj.score || 0),
+                   lastPct: le.lastPct, lastPass: le.lastPass,
+                   submittedOn: le.submittedOn, submittedAt: le.submittedAt };
+      }
+      lsWrite(o);
+      var sLocal = secRead(), pushSec = [];
+      MODULE_KEYS.forEach(function(k){
+        var a = (sLocal[k] || []).slice();
+        (remoteSec[k] || []).forEach(function(n){ if (a.indexOf(n) === -1) a.push(n); });
+        (sLocal[k] || []).forEach(function(n){ if ((remoteSec[k] || []).indexOf(n) === -1) pushSec.push([k, n]); });
+        if (a.length) { a.sort(function(x,y){ return x-y; }); sLocal[k] = a; }
+      });
+      secWrite(sLocal);
+      onState(state(), true);
+
+      /* Push anything localStorage had that Firestore did not. */
+      var pending = Object.keys(local.modules || {}).filter(function(k){ return !isDone(courseObj, k); });
+      for (var i = 0; i < pending.length; i++) {
+        try { await completeModule(pending[i]); } catch(e){ console.error("[progress] backfill failed", e); }
+      }
+      for (var j = 0; j < pushSec.length; j++) {
+        try { var upd = {}; upd[secField(pushSec[j][0])] = fs.arrayUnion(pushSec[j][1]); await fs.setDoc(prRef, upd, { merge: true }); }
+        catch(e){ console.error("[progress] section backfill failed", e); }
+      }
+      await setModuleInProgress(moduleKey);
+    } catch(e) {
+      console.error("[progress] Firestore unavailable, localStorage only:", e);
+      onState(state(), false);
+    }
+  }
+
+  /* ---- Redo -----------------------------------------------------------
+     Clears one module: completion, section ticks and check-question answers,
+     on this device and in Firestore. Final test attempts are records
+     and are left untouched.                                               */
+  function clearLocalModule(mk){
+    var o = lsRead(); if (o.modules) delete o.modules[mk]; lsWrite(o);
+    var s = secRead(); delete s[mk]; secWrite(s);
+    var g = jRead(GK + user.uid); delete g[mk]; jWrite(GK + user.uid, g);
+    return state();
+  }
+  function redoModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      cu.modules[mk] = fs.deleteField();
+      if (obj.courseCompletedOn) { cu.courseCompletedOn = fs.deleteField(); cu.courseCompletedAt = fs.deleteField(); }
+      var doneAfter = function(k){ return k !== mk && !!(existing[k] && existing[k].completedOn); };
+      var next = null;
+      for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+      cu.moduleInProgress = next;
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      var fresh = Object.assign({}, existing); delete fresh[mk];
+      courseObj = Object.assign({}, obj, { modules: fresh, moduleInProgress: next });
+      delete courseObj.courseCompletedOn; delete courseObj.courseCompletedAt;
+      var pr = {}; pr[secField(mk)] = fs.deleteField();
+      return Promise.all([fs.setDoc(cpRef, update, { merge: true }), fs.setDoc(prRef, pr, { merge: true })]);
+    });
+  }
+
+  window.SFProgress = {
+    start: start,
+    redo: redoModule,
+    clearLocalModule: clearLocalModule,
+    moduleKeys: MODULE_KEYS,
+    sectionTotals: SECTION_TOTALS,
+    isDone: isDone,
+    sectionsDone: sectionsDone,
+    read: function(){ return user ? state() : {}; },
+    setLocal: function(mk, done){ return lsSetModule(mk, done); },
+    sync: function(mk, done){
+      if (!ready) return Promise.reject(new Error("offline"));
+      return done ? completeModule(mk) : Promise.resolve();
+    },
+    tickSection: tickSection,
+    recordExam: recordExam,
+    examRemote: function(){ return examObj; },
+    isReady: function(){ return ready; },
+    gateKey: GK,
+    courseId: function(){ return CP_COURSE_ID; }
+  };
+})();
+</script>
+
+<script type="module">
+(function(){
+  var MK = "sc1-m5";
+  var PASS_PCT = 70;   /* module check: share of questions that must be right */
+  var NSEC = 4;
+  var GATE = [{"answer": 1, "why": "Parameters keep the query and the data apart, so data can never change the query. Filters and length limits can be got round."}, {"answer": 1, "why": "The script is stored by the server and runs for every viewer, so it is stored cross-site scripting."}, {"answer": 2, "why": "textContent shows the value as plain text. The others treat it as HTML or code."}, {"answer": 2, "why": "Without a shell, special characters have no meaning. Validation is a second layer. Removing a few characters misses others."}, {"answer": 0, "why": "Cross-site scripting is injection into a web page, and is part of A05 Injection."}];
+  var P = window.SFProgress;
+  var KEYS = P.moduleKeys;
+
+  function gateRead(uid){ try { return JSON.parse(localStorage.getItem(P.gateKey + uid) || "{}"); } catch(_) { return {}; } }
+  function gateWrite(uid, o){ try { localStorage.setItem(P.gateKey + uid, JSON.stringify(o)); } catch(_) {} }
+
+  document.querySelectorAll('.langbar button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var open = b.getAttribute('data-lang') === 'open';
+      var scope = b.closest('.stage-body') || document;
+      scope.querySelectorAll('details.lang').forEach(function(d){ d.open = open; });
+    });
+  });
+
+  window.SFAuth.mount(async function(user, signOut){
+    document.getElementById('who').innerHTML =
+      (user.email || '') + ' <button class="signout" id="signout">Sign out</button>';
+    var so = document.getElementById('signout');
+    if (so && signOut) so.onclick = function(){ signOut().then(function(){ location.reload(); }); };
+
+    var box = document.getElementById('cmplt'), lbl = document.getElementById('lbl'),
+        sync = document.getElementById('sync'), nextbtn = document.getElementById('nextbtn'),
+        gcheck = document.getElementById('gcheck'), gstate = document.getElementById('gstate');
+    var gatePassed = false;
+
+    function showGateSatisfied(){
+      gatePassed = true;
+      GATE.forEach(function(gq, i){
+        var rs = document.querySelectorAll('input[name="g' + i + '"]');
+        if (rs[gq.answer]) rs[gq.answer].checked = true;
+        var fb = document.getElementById('gfb-' + i);
+        if (fb) fb.innerHTML = '<div class="callout good"><span class="tag">Correct</span><p>' + gq.why + '</p></div>';
+      });
+      document.querySelectorAll('.gq input[type=radio]').forEach(function(r){ r.disabled = true; });
+      if (gcheck) gcheck.style.display = 'none';
+      gstate.textContent = 'Check questions passed';
+    }
+
+    gcheck.addEventListener('click', function(){
+      var nRight = 0, unanswered = 0;
+      var need = Math.ceil(GATE.length * PASS_PCT / 100);
+      GATE.forEach(function(gq, i){
+        var sel = document.querySelector('input[name="g' + i + '"]:checked');
+        var fb  = document.getElementById('gfb-' + i);
+        if (!sel) { unanswered++; fb.innerHTML = ''; return; }
+        var ok = parseInt(sel.value, 10) === gq.answer;
+        if (ok) nRight++;
+        fb.innerHTML = ok
+          ? '<div class="callout good"><span class="tag">Correct</span><p>' + gq.why + '</p></div>'
+          : '<div class="callout caution"><span class="tag">Not quite</span><p>Look at the module again and try once more.</p></div>';
+      });
+      if (unanswered) { gstate.textContent = 'Answer every question first.'; return; }
+      if (nRight < need) { gstate.textContent = nRight + ' of ' + GATE.length + ' correct. You need ' + need + '. Try again.'; return; }
+      var gs = gateRead(user.uid); gs[MK] = true; gateWrite(user.uid, gs);
+      showGateSatisfied();
+      paint(P.read());
+    });
+
+    document.querySelectorAll('input.sec').forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if (!cb.checked) return;
+        var n = parseInt(cb.getAttribute('data-sec'), 10);
+        var pr = P.tickSection(MK, n);
+        paint(P.read());
+        pr.catch(function(e){
+          console.error('[progress] section sync failed', e);
+          sync.textContent = 'Saved on this device. It will sync to your SF record next time you open this page online.';
+        });
+      });
+    });
+
+    function paint(state){
+      var ticks = (state.sections || {})[MK] || [];
+      for (var i = 1; i <= NSEC; i++) {
+        var cb = document.querySelector('input.sec[data-sec="' + i + '"]');
+        var on = ticks.indexOf(i) !== -1;
+        cb.checked = on; cb.disabled = on;
+        document.getElementById('sd-' + i).classList.toggle('ticked', on);
+        document.getElementById('num-' + i).classList.toggle('ok', on);
+      }
+      var nDone = KEYS.filter(function(k){ return P.isDone(state, k); }).length;
+      var secCount = Math.min(ticks.length, NSEC);
+      document.getElementById('fill').style.width = (secCount / NSEC) * 100 + '%';
+      document.getElementById('count').textContent = 'This module: ' + secCount + ' of ' + NSEC
+        + ' sections \u00b7 Course: ' + nDone + ' of ' + KEYS.length + ' modules complete';
+
+      var done = P.isDone(state, MK);
+      if (!gatePassed && (done || gateRead(user.uid)[MK])) showGateSatisfied();
+      if (done) {
+        var m = (state.modules || {})[MK] || {};
+        box.checked = true; box.disabled = true;
+        lbl.classList.add('checked'); lbl.classList.remove('locked');
+        sync.textContent = 'Completed on ' + (m.completedOn || '') + (m.completedAt ? ' at ' + m.completedAt : '');
+        nextbtn.classList.remove('off');
+        return;
+      }
+      nextbtn.classList.add('off');
+      box.checked = false;
+      var allSec = secCount >= NSEC;
+      box.disabled = !(allSec && gatePassed);
+      lbl.classList.toggle('locked', box.disabled);
+      if (!allSec && !gatePassed) sync.textContent = 'To unlock: finish every section and pass the check questions.';
+      else if (!allSec) sync.textContent = 'To unlock: tick the finish box at the end of every section.';
+      else if (!gatePassed) sync.textContent = 'To unlock: pass the check questions above.';
+      else sync.textContent = '';
+    }
+
+    await P.start(user, MK, function(state){ paint(state); });
+
+    box.addEventListener('change', async function(){
+      if (!box.checked) return;
+      var state = P.setLocal(MK, true);          /* localStorage first */
+      paint(state);
+      sync.textContent = 'Saved on this device. Syncing\u2026';
+      try {
+        await P.sync(MK, true);
+        var m = (state.modules || {})[MK] || {};
+        sync.textContent = 'Completed on ' + (m.completedOn || '') + ' \u00b7 saved to your SF record';
+      } catch(e) {
+        console.error('[progress] sync failed', e);
+        sync.textContent = 'Saved on this device. It will sync to your SF record next time you open this page online.';
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
