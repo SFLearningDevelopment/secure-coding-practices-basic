@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<!-- build: 2026110601 -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final test | Secure Coding: Basic to Intermediate</title>
+<style>
+:root{
+  --ink:#1B2124; --ink-2:#495259; --rule:#DFE3DE; --paper:#F6F7F5; --panel:#FFFFFF;
+  --level:#1a6eb5; --level-soft:#E8F1FA;
+  --lens:#B0721A; --lens-soft:#FBF4E7;
+  --verify:#41525F; --verify-soft:#EEF2F4;
+  --caution:#9E3025; --caution-soft:#FBEDEB;
+  --ok:#2E6B34; --ok-soft:#E9F2E9;
+  --serif: Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif;
+  --sans: ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono: ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 22px 90px}
+a{color:var(--level);text-decoration-thickness:1px;text-underline-offset:2px}
+.masthead{border-bottom:1px solid var(--rule);background:var(--panel)}
+.masthead .wrap{padding-top:38px;padding-bottom:30px}
+.crumb{font-family:var(--sans);font-size:13px;color:var(--ink-2);margin:0 0 14px}
+.who{float:right;font-size:12.5px;color:var(--ink-2)}
+.back{color:var(--level);text-decoration:none;font-weight:600}
+.back:hover{text-decoration:underline}
+.signout{background:none;border:0;color:var(--level);font-size:12.5px;cursor:pointer;
+  text-decoration:underline;font-family:inherit;padding:0}
+.chip{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.02em;
+  color:#fff;background:var(--level);border-radius:3px;padding:3px 9px;margin-right:8px}
+h1{font-family:var(--sans);font-weight:640;font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.015em}
+.deck{font-size:18px;color:var(--ink-2);margin:0;max-width:64ch}
+.facts{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px;padding-top:18px;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:13.5px;color:var(--ink-2)}
+.facts b{display:block;color:var(--ink);font-weight:600}
+.progress{position:sticky;top:0;z-index:20;background:rgba(246,247,245,.94);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+.progress .wrap{display:flex;align-items:center;gap:14px;padding-top:9px;padding-bottom:9px}
+.bar{flex:1;height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--level);transition:width .25s ease}
+.count{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+h2{font-family:var(--sans);font-weight:640;font-size:22px;line-height:1.25;margin:0;letter-spacing:-.01em}
+h3{font-family:var(--sans);font-weight:620;font-size:16px;margin:26px 0 8px}
+p{margin:0 0 14px;max-width:72ch}
+ul,ol{max-width:72ch;padding-left:22px}
+li{margin-bottom:7px}
+section.stage{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.stage-head{display:flex;gap:16px;align-items:baseline;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:14px;color:var(--level);border:1px solid var(--level);
+  border-radius:50%;width:30px;height:30px;min-width:30px;display:flex;align-items:center;
+  justify-content:center;align-self:flex-start;margin-top:2px}
+.num.ok{background:var(--level);color:#fff}
+.goal{font-family:var(--sans);font-size:14px;color:var(--ink-2);margin:0 0 18px 46px}
+.stage-body{margin-left:46px}
+.callout{border-radius:5px;padding:14px 16px;margin:0 0 16px;font-size:15.5px}
+.callout p{margin:0;max-width:66ch}
+.callout p+p{margin-top:9px}
+.callout ul{margin:6px 0 0;font-size:15px}
+.callout .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;display:block;margin-bottom:5px}
+.lens{background:var(--lens-soft);border-left:3px solid var(--lens)}
+.lens .tag{color:var(--lens)}
+.verify{background:var(--verify-soft);border-left:3px dashed var(--verify)}
+.verify .tag{color:var(--verify)}
+.caution{background:var(--caution-soft);border-left:3px solid var(--caution)}
+.caution .tag{color:var(--caution)}
+.good{background:var(--ok-soft);border-left:3px solid var(--ok)}
+.good .tag{color:var(--ok)}
+.done{background:var(--level-soft);border-radius:5px;padding:16px 18px;margin-top:26px}
+.done .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;color:var(--level);display:block;margin-bottom:8px}
+.done label{display:flex;gap:11px;align-items:flex-start;font-size:15.5px;cursor:pointer;margin:0}
+.done input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.done label.checked{color:var(--ink-2)}
+.done .sync{font-family:var(--sans);font-size:12px;color:var(--ink-2);margin:9px 0 0 27px;min-height:15px}
+.done input:disabled{accent-color:#B9C2BA}
+.done label.locked{color:#8D979C;cursor:not-allowed}
+.orient{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.secdone{display:flex;gap:10px;align-items:center;font-family:var(--sans);font-size:14px;color:var(--ink-2);
+  border-top:1px solid var(--rule);margin-top:22px;padding-top:14px;cursor:pointer}
+.secdone input{accent-color:var(--level);width:16px;height:16px;flex:none}
+.secdone.ticked{color:var(--level);font-weight:600}
+section.stage.check{border-color:#C9DAEA;background:#FCFDFE}
+.gstem{font-weight:600;margin:0 0 12px}
+.gq{margin-bottom:26px}
+.gopt{display:flex;gap:11px;align-items:flex-start;font-size:16px;margin-bottom:8px;cursor:pointer;max-width:72ch}
+.gopt input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.gopt input:disabled+span{color:var(--ink-2)}
+.gfb{margin-top:12px}
+.gfb .callout{margin-bottom:0}
+.gactions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.gstate{font-family:var(--sans);font-size:13px;color:var(--ink-2)}
+button.pbtn{border:0;cursor:pointer;font-family:var(--sans)}
+.recap{font-family:var(--sans);font-size:15px;color:var(--ink-2);border-top:1px solid var(--rule);
+  margin-top:24px;padding-top:16px}
+.recap b{color:var(--ink);font-weight:620}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:34px 0 0;flex-wrap:wrap}
+.pbtn{display:inline-block;background:var(--level);color:#fff;text-decoration:none;
+  font-family:var(--sans);font-size:14.5px;font-weight:600;padding:11px 22px;border-radius:8px}
+.pbtn:hover{filter:brightness(1.08)}
+.pbtn.ghost{background:none;color:var(--level);border:1.5px solid var(--level)}
+.pbtn.off,.pbtn:disabled{background:none;color:#A9B2B6;border:1.5px solid var(--rule);pointer-events:none}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:0 0 16px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-size:13px;font-weight:620}
+td code,li code,p code{font-family:var(--mono);font-size:.86em;background:#EEF2F4;border-radius:3px;padding:1px 5px}
+.fname{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);margin:0 0 4px}
+pre.code{background:#122130;color:#E3EAF1;font-family:var(--mono);font-size:13.5px;line-height:1.55;
+  padding:14px 16px;border-radius:6px;overflow-x:auto;margin:0 0 16px;white-space:pre}
+pre.code .c{color:#8FA3B5}
+pre.term{background:#1B2124;color:#D8E0D9}
+figure{margin:0 0 22px}
+figcaption{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);margin-top:8px}
+svg{width:100%;height:auto;display:block}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding-top:18px;
+  font-family:var(--sans);font-size:12.5px;color:var(--ink-2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:620px){
+  body{font-size:16px}
+  .stage-body,.goal{margin-left:0}
+  .stage-head{gap:12px}
+  section.stage,.orient{padding:20px 18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<style>
+  details.lang{border:1px solid var(--rule);border-radius:6px;margin:0 0 10px;background:var(--panel)}
+  details.lang>summary{cursor:pointer;list-style:none;font-family:var(--sans);font-size:14.5px;font-weight:600;
+    padding:10px 14px;display:flex;align-items:center;gap:10px}
+  details.lang>summary::-webkit-details-marker{display:none}
+  details.lang>summary::before{content:"\25B8";color:var(--level);font-size:13px;width:12px}
+  details.lang[open]>summary::before{content:"\25BE"}
+  details.lang>summary:hover{background:var(--level-soft)}
+  details.lang>.lbody{padding:4px 16px 4px}
+  .langbar{display:flex;gap:10px;font-family:var(--sans);font-size:12.5px;margin:0 0 8px}
+  .langbar button{background:none;border:0;color:var(--level);cursor:pointer;padding:0;text-decoration:underline;font-family:inherit;font-size:inherit}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <p class="crumb"><span id="who" class="who"></span><a class="back" href="index.html?v=2026110601">&#8592; Dashboard</a> &middot; SF Knowledge Hub &middot; Secure Coding: Basic to Intermediate</p>
+    <p><span class="chip">Course 1 certification</span></p>
+    <h1>Final test</h1>
+    <p class="deck">Ten practical scenarios and ten multiple-choice questions from all seven modules. Pass to earn the SF Certified Secure Coding Practitioner certification.</p>
+    <div class="facts">
+      <div><b>Questions</b>10 scenarios and 10 multiple-choice questions</div>
+      <div><b>Time</b>45 minutes</div>
+      <div><b>Pass mark</b>80% (16 of 20)</div>
+      <div><b>Attempts</b>3</div>
+    </div>
+  </div>
+</header>
+
+<div class="progress"><div class="wrap">
+  <div class="bar"><span id="fill"></span></div>
+  <div class="count" id="count">Loading&hellip;</div>
+</div></div>
+
+<div class="wrap">
+
+<div class="orient" id="locked" hidden>
+  <h2>Finish all seven modules first</h2>
+  <p>The final test opens when every module is marked complete. You have <span id="lockcount">0</span> of 7 done.</p>
+  <p><a class="pbtn" href="index.html?v=2026110601">Back to the dashboard</a></p>
+</div>
+
+<div id="content" hidden>
+<section class="stage" id="exam">
+  <div class="stage-head"><div class="num">&#9733;</div><h2>Final test</h2></div>
+  <p class="goal">Part 1 has 10 scenarios: choose the correct fix. Part 2 has 10 multiple-choice questions. Each question has one correct answer.</p>
+  <div class="stage-body">
+    <div id="exintro">
+      <ul>
+        <li>You have 45 minutes. The timer keeps running if you close the page, and the test is submitted when time runs out.</li>
+        <li>You need 80% (16 of 20) to pass. You have 3 attempts, and each attempt draws a new set of questions.</li>
+        <li>Your answers are saved on this device as you go, so you can reload the page if something goes wrong.</li>
+        <li>After you submit, you see your score for each module, but not the correct answers.</li>
+      </ul>
+      <div class="callout verify" id="exstatus"><span class="tag">Your test status</span><p id="exstatustext">&ndash;</p></div>
+      <div class="gactions"><button class="pbtn" id="exstart" type="button">Start the test</button><span class="gstate" id="exmsg"></span></div>
+    </div>
+
+    <div id="exarea" hidden>
+      <div class="timer" id="timer">45:00</div>
+      <div id="qlist"></div>
+      <div class="gactions"><button class="pbtn" id="exsubmit" type="button">Submit the test</button><span class="gstate" id="exanswered"></span></div>
+    </div>
+
+    <div id="exresult" hidden></div>
+  </div>
+</section>
+</div>
+
+<div class="pager">
+  <a class="pbtn ghost" href="index.html?v=2026110601">&#8592; Dashboard</a>
+  <span></span>
+</div>
+
+<footer>
+  <div>SF Knowledge Hub &middot; Secure Coding: Basic to Intermediate &middot; Final test</div>
+  <div>build 2026110601</div>
+</footer>
+
+</div>
+<style>
+  .timer{position:sticky;top:44px;z-index:15;display:inline-block;background:var(--level);color:#fff;
+    font-family:var(--mono);font-size:15px;padding:6px 14px;border-radius:6px;margin:0 0 18px}
+  .timer.low{background:var(--caution)}
+  .xpart{font-family:var(--sans);font-size:17px;font-weight:640;margin:26px 0 4px}
+  .xq{border-top:1px solid var(--rule);padding:18px 0 8px}
+  .xq .qn{font-family:var(--sans);font-size:12px;color:var(--ink-2);font-weight:620;margin:0 0 4px}
+  .xq pre.code{margin:0 0 14px}
+  .score{font-family:var(--sans);font-size:26px;font-weight:660;margin:0 0 6px}
+  .score.pass{color:var(--ok)} .score.fail{color:var(--caution)}
+</style>
+
+<script src="sc1-question-bank.js?v=2026110601"></script>
+
+<!-- SF auth gate: Google SSO or email/password sign-in. -->
+<script>
+(function () {
+  /* Live config for sfcertification-grafana. */
+  const firebaseConfig = {
+    apiKey: "__FIREBASE_API_KEY__",
+    authDomain: "sfcertification-grafana.firebaseapp.com",
+    projectId: "sfcertification-grafana",
+    storageBucket: "sfcertification-grafana.firebasestorage.app",
+    messagingSenderId: "227322696511",
+    appId: "1:227322696511:web:12e7ced7dd3d45fa06798a"
+  };
+  const ALLOWED_DOMAIN = "sourcefuse.com";
+  /* Admins: always allowed in, without a nomination. */
+  const ADMINS = ["jv.ravichandran@sourcefuse.com", "noushin.khan@sourcefuse.com"];
+
+  /* `courses` document id for this course. Nominations are read from
+     courses/{COURSE_ID}/nominations/{email}, managed in the SF Knowledge Hub. */
+  const COURSE_ID = "__SC1_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  /* True when the page is shown inside another page (the SF Knowledge Hub). */
+  const IN_FRAME = (function(){ try { return window.self !== window.top; } catch (_) { return true; } })();
+
+  let auth, GoogleProvider, signInPopup, signInEmail, onAuth, signOutFn, setPersist, localPersist, readNomination;
+  let readyCb = null;
+
+  async function initFirebase() {
+    const appMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const authMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+    const app = appMod.getApps().length ? appMod.getApp() : appMod.initializeApp(firebaseConfig);
+    auth = authMod.getAuth(app);
+    GoogleProvider = authMod.GoogleAuthProvider;
+    signInPopup    = (p) => authMod.signInWithPopup(auth, p);
+    signInEmail    = (e, pw) => authMod.signInWithEmailAndPassword(auth, e, pw);
+    onAuth         = (cb) => authMod.onAuthStateChanged(auth, cb);
+    signOutFn      = () => authMod.signOut(auth);
+    setPersist     = authMod.setPersistence;
+    localPersist   = authMod.browserLocalPersistence;
+    try { await setPersist(auth, localPersist); } catch (_) {}
+    const fsMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+    const db = fsMod.getFirestore(app);
+    readNomination = (email) => fsMod.getDoc(fsMod.doc(db, "courses", COURSE_ID, "nominations", email));
+  }
+
+  function styleTag(){return `<style>
+    .sf-auth-backdrop{position:fixed;inset:0;background:rgba(16,38,60,.55);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+    .sf-auth-card{background:#fff;border-radius:22px;padding:42px 36px 38px;width:100%;max-width:420px;box-shadow:0 12px 40px rgba(10,30,55,.25);text-align:center;font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    .sf-auth-badge{display:inline-block;background:var(--level,#1a6eb5);color:#fff;font-weight:700;font-size:12px;padding:4px 11px;border-radius:14px;margin-bottom:14px}
+    .sf-auth-card h2{margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.3;color:#15212d;font-family:inherit}
+    .sf-auth-sub{margin:0 auto 26px;max-width:330px;color:#5e6b79;font-size:14.5px;line-height:1.6}
+    .sf-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#366db0;color:#fff;border:0;border-radius:9px;padding:15px;font-size:15.5px;font-weight:600;cursor:pointer;font-family:inherit}
+    .sf-btn:hover{background:#2e5f9b}
+    .sf-btn svg{width:19px;height:19px;flex:none}
+    .sf-or{margin:20px 0;color:#9da7b2;font-size:11.5px;font-weight:500;letter-spacing:.14em}
+    .sf-inp{display:block;width:100%;box-sizing:border-box;border:1.5px solid #dfe5eb;border-radius:9px;padding:13px 14px;font-size:15px;margin:0 0 9px;color:#15212d;background:#fff;font-family:inherit}
+    .sf-inp::placeholder{color:#757575}
+    .sf-inp:focus{outline:none;border-color:#366db0}
+    .sf-err{color:#b5341a;font-size:13px;margin-top:12px;min-height:16px;line-height:1.5}
+    .sf-frame{color:#5e6b79;font-size:12.5px;line-height:1.55;margin:14px 0 0}
+    .sf-frame a{color:#366db0}
+  </style>`;}
+
+  function signinHTML(){return `
+    <div class="sf-auth-backdrop" id="sf-auth"><div class="sf-auth-card">
+      <h2>Secure Coding: Basic to Intermediate</h2>
+      <p class="sf-auth-sub">Sign in with your SourceFuse Google account to access the course and save your progress.</p>
+      <button class="sf-btn" id="sf-google" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.35 11.1H12v3.2h5.35c-.5 2.5-2.6 3.9-5.35 3.9a6.2 6.2 0 1 1 4.1-10.85l2.4-2.4A9.6 9.6 0 1 0 12 21.6c5 0 9.6-3.6 9.6-9.6 0-.3 0-.6-.05-.9z"/></svg> Sign in with Google</button>
+      <div class="sf-or">OR</div>
+      <input class="sf-inp" id="sf-email" type="email" placeholder="you@sourcefuse.com" autocomplete="username">
+      <input class="sf-inp" id="sf-pass" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="sf-btn" id="sf-email-btn" type="button">Sign in with email</button>
+      <div class="sf-err" id="sf-err"></div>
+      ${IN_FRAME ? '<p class="sf-frame">If the Google sign-in window does not open, <a href="' + location.href + '" target="_blank" rel="noopener">open the course in a new tab</a>, or use Sign in with email.</p>' : ''}
+    </div></div>`;}
+
+  function fail(m){ const e = document.getElementById("sf-err"); if (e) e.textContent = m; }
+  function validDomain(x){
+    if (typeof x !== "string") return false;
+    return x.toLowerCase().endsWith("@" + ALLOWED_DOMAIN);
+  }
+  /* Same check as the SF Knowledge Hub: this course's nominations document
+     for the email exists and is not marked nominated: false. */
+  async function isNominated(x){
+    if (typeof x !== "string") return false;
+    if (ADMINS.indexOf(x.toLowerCase()) !== -1) return true;
+    if (!readNomination) return false;
+    try {
+      const s = await readNomination(x.toLowerCase());
+      return s.exists() && s.data().nominated !== false;
+    } catch (e) {
+      console.log("[auth] nomination read failed:", e && e.message);
+      return false;
+    }
+  }
+  function showNotNominated(){
+    const card = document.getElementById("sf-auth");
+    if (!card) return;
+    card.style.display = "flex";
+    card.innerHTML = '<div class="sf-auth-card">'
+      + '<div class="sf-auth-badge">SF Knowledge Hub</div>'
+      + '<h2>You are not nominated to this course</h2>'
+      + '</div>';
+  }
+  function proceed(user){
+    const el = document.getElementById("sf-auth"); if (el) el.remove();
+    if (readyCb) readyCb(user, signOutFn);
+  }
+
+  function wireSignin(){
+    document.getElementById("sf-google").addEventListener("click", async () => {
+      fail("");
+      if (!signInPopup) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const p = new GoogleProvider();
+      p.setCustomParameters({ hd: ALLOWED_DOMAIN });
+      try {
+        const r = await signInPopup(p);
+        const u = r && r.user;
+        const email = (u && u.email) || "";
+        if (!validDomain(email)) {
+          await signOutFn();
+          return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+        }
+        if (!(await isNominated(email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithPopup failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/popup-blocked")
+          return fail(IN_FRAME
+            ? "The sign-in window was blocked here. Open the course in a new tab using the link below, or use Sign in with email."
+            : "Your browser blocked the sign-in window. Allow pop-ups for this site, then try again.");
+        if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request")
+          return fail("Sign-in was closed before it finished. Try again.");
+        fail("Google sign-in couldn't complete. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+    document.getElementById("sf-email-btn").addEventListener("click", async () => {
+      fail("");
+      if (!signInEmail) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const email = (document.getElementById("sf-email").value || "").trim().toLowerCase();
+      const pass  = document.getElementById("sf-pass").value || "";
+      if (!email || !pass) return fail("Enter your email and password.");
+      if (!validDomain(email)) return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      try {
+        const r = await signInEmail(email, pass);
+        const u = r && r.user;
+        if (!(await isNominated((u && u.email) || email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithEmailAndPassword failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found")
+          return fail("Incorrect email or password.");
+        fail("Sign-in failed. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+  }
+
+  async function mount(onReady){
+    readyCb = onReady;
+    document.head.insertAdjacentHTML("beforeend", styleTag());
+    document.body.insertAdjacentHTML("beforeend", signinHTML());
+    /* Hidden until onAuth reports no session. A signed-in nominated user
+       goes straight through without the overlay appearing at all. */
+    const authCard = document.getElementById("sf-auth");
+    if (authCard) authCard.style.display = "none";
+    try { await initFirebase(); }
+    catch (e) {
+      console.log("[auth] init failed:", e && e.message);
+      if (authCard) authCard.style.display = "flex";
+      fail("Sign-in service didn't load. Reload the page.");
+      return;
+    }
+    if (onAuth) onAuth(async (u) => {
+      if (!u) {
+        if (authCard) authCard.style.display = "flex";
+        return;
+      }
+      if (!validDomain(u.email)) {
+        await signOutFn();
+        if (authCard) authCard.style.display = "flex";
+        return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      }
+      /* Signed in and on-domain, but not on the list. Do not sign them out
+         automatically: the session is shared with the SF Knowledge Hub and
+         dropping it would sign them out of the Hub too. */
+      if (!(await isNominated(u.email))) return showNotNominated();
+      proceed(u);
+    });
+    wireSignin();
+  }
+
+  window.SFAuth = { mount: mount };
+})();
+</script>
+
+<!-- Progress: localStorage written first, Firestore synced after. -->
+<script type="module">
+(function(){
+  /* `courses` document id for this course. Same value in every file of this course. */
+  var CP_COURSE_ID = "__SC1_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  var MODULE_KEYS = ["sc1-m0", "sc1-m1", "sc1-m2", "sc1-m3", "sc1-m4", "sc1-m5", "sc1-m6"];
+  var SECTION_TOTALS = {"sc1-m0": 4, "sc1-m1": 4, "sc1-m2": 4, "sc1-m3": 4, "sc1-m4": 4, "sc1-m5": 4, "sc1-m6": 4};   /* sections per module */
+  var FB = "https://www.gstatic.com/firebasejs/10.12.2/";
+  var LS  = "sf-sc1:";                       /* module completion, final test summary */
+  var LSS = "sf-sc1-sec:";                   /* section ticks */
+  var GK  = "sf-sc1-gate:";                  /* check-question gate */
+
+  var fs = null, db = null, cpRef = null, prRef = null, erRef = null,
+      user = null, courseObj = {}, examObj = null, ready = false;
+
+  function stamp(){
+    var p = function(n){ return String(n).padStart(2,"0"); };
+    var d = new Date();
+    return { date: d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()),
+             time: p(d.getHours())+":"+p(d.getMinutes())+":"+p(d.getSeconds()) };
+  }
+  /* Legacy progress/{uid} field for a module: sc1-m1 -> sc1_m1 */
+  function secField(mk){ return mk.replace(/-/g, "_"); }
+
+  /* ---- localStorage layer ---------------------------------------------- */
+  function jRead(k){ try { return JSON.parse(localStorage.getItem(k) || "{}"); } catch(_) { return {}; } }
+  function jWrite(k, o){ try { localStorage.setItem(k, JSON.stringify(o)); } catch(_) {} }
+  function lsRead(){ return jRead(LS + user.uid); }
+  function lsWrite(o){ jWrite(LS + user.uid, o); }
+  function secRead(){ return jRead(LSS + user.uid); }
+  function secWrite(o){ jWrite(LSS + user.uid, o); }
+
+  function state(){
+    var o = lsRead();
+    return { modules: o.modules || {}, exam: o.exam || null, sections: secRead() };
+  }
+  function lsSetModule(mk, done){
+    var o = lsRead();
+    o.modules = o.modules || {};
+    if (done) { var t = stamp(); o.modules[mk] = { completedOn: t.date, completedAt: t.time }; }
+    else delete o.modules[mk];
+    lsWrite(o);
+    return state();
+  }
+  function isDone(st, mk){
+    var m = (st && st.modules || {})[mk];
+    return !!(m && m.completedOn);
+  }
+  function sectionsDone(st, mk){
+    var a = ((st && st.sections) || {})[mk] || [];
+    return a.length;
+  }
+
+  /* ---- Firestore layer --------------------------------------------------- */
+  function base(){ return { email: user.email, name: user.displayName || user.email, courses: {} }; }
+
+  function setModuleInProgress(mk){
+    if (!ready || !mk) return Promise.resolve();
+    if (courseObj.courseCompletedOn) return Promise.resolve();
+    if (isDone(courseObj, mk)) return Promise.resolve();
+    var needStart = !courseObj.courseStartedOn;
+    if (courseObj.moduleInProgress === mk && !needStart) return Promise.resolve();
+    var t = stamp();
+    var cu = { moduleInProgress: mk };
+    if (needStart) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+    var update = base(); update.courses[CP_COURSE_ID] = cu;
+    courseObj.moduleInProgress = mk;
+    if (needStart) courseObj.courseStartedOn = t.date;
+    return fs.setDoc(cpRef, update, { merge: true })
+      .catch(function(e){ console.error("[progress] moduleInProgress write failed", e); });
+  }
+
+  /* Read-then-merge completion write. */
+  function completeModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    var t = stamp();
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      if (!obj.courseStartedOn) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+      if (!(existing[mk] && existing[mk].completedOn)) cu.modules[mk] = { completedOn: t.date, completedAt: t.time };
+      var doneAfter = function(k){ return !!((existing[k] && existing[k].completedOn) || cu.modules[k]); };
+      if (MODULE_KEYS.every(doneAfter)) {
+        if (!obj.courseCompletedOn) { cu.courseCompletedOn = t.date; cu.courseCompletedAt = t.time; }
+        cu.moduleInProgress = null;
+      } else {
+        var next = null;
+        for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+        cu.moduleInProgress = next;
+      }
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      courseObj = Object.assign({}, obj, cu, { modules: Object.assign({}, existing, cu.modules) });
+      return fs.setDoc(cpRef, update, { merge: true });
+    });
+  }
+
+  /* Section tick: localStorage first, then progress/{uid}.sc1_mN (arrayUnion). */
+  function tickSection(mk, n){
+    var s = secRead();
+    var a = s[mk] || [];
+    if (a.indexOf(n) === -1) { a.push(n); a.sort(function(x,y){ return x-y; }); }
+    s[mk] = a; secWrite(s);
+    if (!ready) return Promise.reject(new Error("offline"));
+    var upd = {}; upd[secField(mk)] = fs.arrayUnion(n);
+    return fs.setDoc(prRef, upd, { merge: true });
+  }
+
+  /* Final test attempt: one attempt document in courseExamResults + best-attempt summary in examResults. */
+  function recordExam(r){
+    var t = stamp();
+    var o = lsRead();
+    var prev = o.exam || {};
+    var attempts = Math.max(prev.attempts || 0, (examObj && examObj.attempts) || 0, r.attemptNumber);
+    var bestPassed = !!(prev.passed || (examObj && examObj.passed) || r.pass);
+    var bestPct = Math.max(prev.score || 0, (examObj && examObj.score) || 0, r.pct);
+    o.exam = { attempts: attempts, passed: bestPassed, score: bestPct, lastPct: r.pct, lastPass: r.pass,
+               submittedOn: t.date, submittedAt: t.time };
+    lsWrite(o);
+    if (!ready) return Promise.reject(new Error("offline"));
+
+    var attemptId = t.date + "_" + t.time.replace(/:/g, "");
+    var aRef = fs.doc(db, "courseExamResults", user.email, "courses", CP_COURSE_ID, "attempts", attemptId);
+    var body = {
+      email: user.email, name: user.displayName || user.email, courseId: CP_COURSE_ID,
+      attemptNumber: r.attemptNumber, correct: r.correct, total: r.total, pct: r.pct, pass: r.pass,
+      submittedAt: new Date().toISOString(), durationSeconds: r.durationSeconds, timeUp: r.timeUp,
+      detail: r.detail
+    };
+    return fs.setDoc(aRef, body).then(function(){
+      return fs.getDoc(erRef);
+    }).then(function(snap){
+      var cur = (snap.exists() ? (snap.data() || {})[CP_COURSE_ID] : null) || {};
+      var better = !cur.passed && (r.pass || (r.pct >= (cur.score || 0)));
+      var summary = {
+        attempts: Math.max((cur.attempts || 0) + 1, r.attemptNumber),
+        correct: better ? r.correct : cur.correct,
+        total: better ? r.total : cur.total,
+        score: better ? r.pct : cur.score,
+        passed: !!(cur.passed || r.pass),
+        timeTaken: better ? r.durationSeconds : cur.timeTaken,
+        timedOut: better ? r.timeUp : cur.timedOut,
+        submittedAt: better ? new Date().toISOString() : cur.submittedAt
+      };
+      examObj = summary;
+      var upd = { learnerEmail: user.email, learnerName: user.displayName || user.email };
+      upd[CP_COURSE_ID] = summary;
+      return fs.setDoc(erRef, upd, { merge: true });
+    });
+  }
+
+  /* ---- Boot ------------------------------------------------------------ */
+  async function start(u, moduleKey, onState){
+    user = u;
+    var local = state();
+    onState(local, false);                       /* paint from localStorage at once */
+    try {
+      var appMod  = await import(FB + "firebase-app.js");
+      fs          = await import(FB + "firebase-firestore.js");
+      var app = appMod.getApp();                 /* DEFAULT app, never a named one */
+      db    = fs.getFirestore(app);
+      cpRef = fs.doc(db, "courseProgress", user.uid);
+      prRef = fs.doc(db, "progress", user.uid);
+      erRef = fs.doc(db, "examResults", user.uid);
+
+      var cs = await fs.getDoc(cpRef);
+      if (cs.exists()) courseObj = ((cs.data() || {}).courses || {})[CP_COURSE_ID] || {};
+      var remoteSec = {};
+      try {
+        var ps = await fs.getDoc(prRef);
+        var pd = ps.exists() ? (ps.data() || {}) : {};
+        MODULE_KEYS.forEach(function(k){ if (Array.isArray(pd[secField(k)])) remoteSec[k] = pd[secField(k)]; });
+      } catch(e){ console.error("[progress] section read failed", e); }
+      try {
+        var es = await fs.getDoc(erRef);
+        examObj = es.exists() ? ((es.data() || {})[CP_COURSE_ID] || null) : null;
+      } catch(e){ console.error("[progress] exam read failed", e); }
+      ready = true;
+
+      /* Merge: anything complete in either store stays complete. */
+      var o = lsRead();
+      o.modules = Object.assign({}, local.modules || {}, courseObj.modules || {});
+      if (examObj) {
+        var le = o.exam || {};
+        o.exam = { attempts: Math.max(le.attempts || 0, examObj.attempts || 0),
+                   passed: !!(le.passed || examObj.passed),
+                   score: Math.max(le.score || 0, examObj.score || 0),
+                   lastPct: le.lastPct, lastPass: le.lastPass,
+                   submittedOn: le.submittedOn, submittedAt: le.submittedAt };
+      }
+      lsWrite(o);
+      var sLocal = secRead(), pushSec = [];
+      MODULE_KEYS.forEach(function(k){
+        var a = (sLocal[k] || []).slice();
+        (remoteSec[k] || []).forEach(function(n){ if (a.indexOf(n) === -1) a.push(n); });
+        (sLocal[k] || []).forEach(function(n){ if ((remoteSec[k] || []).indexOf(n) === -1) pushSec.push([k, n]); });
+        if (a.length) { a.sort(function(x,y){ return x-y; }); sLocal[k] = a; }
+      });
+      secWrite(sLocal);
+      onState(state(), true);
+
+      /* Push anything localStorage had that Firestore did not. */
+      var pending = Object.keys(local.modules || {}).filter(function(k){ return !isDone(courseObj, k); });
+      for (var i = 0; i < pending.length; i++) {
+        try { await completeModule(pending[i]); } catch(e){ console.error("[progress] backfill failed", e); }
+      }
+      for (var j = 0; j < pushSec.length; j++) {
+        try { var upd = {}; upd[secField(pushSec[j][0])] = fs.arrayUnion(pushSec[j][1]); await fs.setDoc(prRef, upd, { merge: true }); }
+        catch(e){ console.error("[progress] section backfill failed", e); }
+      }
+      await setModuleInProgress(moduleKey);
+    } catch(e) {
+      console.error("[progress] Firestore unavailable, localStorage only:", e);
+      onState(state(), false);
+    }
+  }
+
+  /* ---- Redo -----------------------------------------------------------
+     Clears one module: completion, section ticks and check-question answers,
+     on this device and in Firestore. Final test attempts are records
+     and are left untouched.                                               */
+  function clearLocalModule(mk){
+    var o = lsRead(); if (o.modules) delete o.modules[mk]; lsWrite(o);
+    var s = secRead(); delete s[mk]; secWrite(s);
+    var g = jRead(GK + user.uid); delete g[mk]; jWrite(GK + user.uid, g);
+    return state();
+  }
+  function redoModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      cu.modules[mk] = fs.deleteField();
+      if (obj.courseCompletedOn) { cu.courseCompletedOn = fs.deleteField(); cu.courseCompletedAt = fs.deleteField(); }
+      var doneAfter = function(k){ return k !== mk && !!(existing[k] && existing[k].completedOn); };
+      var next = null;
+      for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+      cu.moduleInProgress = next;
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      var fresh = Object.assign({}, existing); delete fresh[mk];
+      courseObj = Object.assign({}, obj, { modules: fresh, moduleInProgress: next });
+      delete courseObj.courseCompletedOn; delete courseObj.courseCompletedAt;
+      var pr = {}; pr[secField(mk)] = fs.deleteField();
+      return Promise.all([fs.setDoc(cpRef, update, { merge: true }), fs.setDoc(prRef, pr, { merge: true })]);
+    });
+  }
+
+  window.SFProgress = {
+    start: start,
+    redo: redoModule,
+    clearLocalModule: clearLocalModule,
+    moduleKeys: MODULE_KEYS,
+    sectionTotals: SECTION_TOTALS,
+    isDone: isDone,
+    sectionsDone: sectionsDone,
+    read: function(){ return user ? state() : {}; },
+    setLocal: function(mk, done){ return lsSetModule(mk, done); },
+    sync: function(mk, done){
+      if (!ready) return Promise.reject(new Error("offline"));
+      return done ? completeModule(mk) : Promise.resolve();
+    },
+    tickSection: tickSection,
+    recordExam: recordExam,
+    examRemote: function(){ return examObj; },
+    isReady: function(){ return ready; },
+    gateKey: GK,
+    courseId: function(){ return CP_COURSE_ID; }
+  };
+})();
+</script>
+
+<script type="module">
+(function(){
+  var CFG = { scenarios: 10, mcqs: 10, minutes: 45, passPct: 80, maxAttempts: 3 };
+  var MOD_NAMES = {"0": "Orientation and lab setup", "1": "Secure coding foundations", "2": "Access control and server-side request forgery",
+                   "3": "Security misconfiguration", "4": "Cryptography and data protection", "5": "Injection and cross-site scripting",
+                   "6": "Authentication and sessions"};
+  var P = window.SFProgress, KEYS = P.moduleKeys;
+  var BANK = window.SC1_BANK || [];
+  var BYID = {}; BANK.forEach(function(q){ BYID[q.id] = q; });
+  var user = null, run = null, timerId = null, submitting = false, lastState = null, online = false;
+
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function shuffle(a){ for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function runKey(){ return 'sf-sc1-exam-run:' + user.uid; }
+  function pendKey(){ return 'sf-sc1-exam-pending:' + user.uid; }
+  function jGet(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch(_) { return null; } }
+  function jSet(k, o){ try { if (o === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(o)); } catch(_) {} }
+
+  /* ---------- status ---------- */
+  function examInfo(state){
+    var ex = state.exam || {};
+    return { used: ex.attempts || 0, passed: !!ex.passed, best: ex.score || 0 };
+  }
+
+  function paint(state){
+    lastState = state;
+    var done = KEYS.filter(function(k){ return P.isDone(state, k); }).length;
+    var all = done === KEYS.length;
+    $('locked').hidden = all; $('content').hidden = !all; $('lockcount').textContent = done;
+
+    var ei = examInfo(state);
+    var left = Math.max(CFG.maxAttempts - ei.used, 0);
+    $('fill').style.width = (ei.passed ? 100 : (ei.used / CFG.maxAttempts) * 100) + '%';
+    $('count').textContent = ei.passed ? 'Final test: passed (' + ei.best + '%)'
+      : 'Final test: not passed yet · ' + left + (left === 1 ? ' attempt' : ' attempts') + ' left';
+
+    var st;
+    if (ei.passed) st = 'Passed. Best score ' + ei.best + '%. You do not need to take the test again.';
+    else if (!left) st = 'Not passed. All ' + CFG.maxAttempts + ' attempts used (best score ' + ei.best + '%). Contact the L&D team.';
+    else if (ei.used) st = 'Not passed yet (best score ' + ei.best + '%). You have ' + left + (left === 1 ? ' attempt' : ' attempts') + ' left.';
+    else st = 'Not taken yet. You have ' + CFG.maxAttempts + ' attempts.';
+    $('exstatustext').textContent = st;
+    var canStart = !ei.passed && left > 0;
+    var btn = $('exstart');
+    if (run) { btn.textContent = 'Resume the test'; btn.disabled = false; }
+    else { btn.textContent = canStart ? 'Start attempt ' + (ei.used + 1) : 'Test closed'; btn.disabled = !canStart; }
+  }
+
+  /* ---------- test run ---------- */
+  function draw(){
+    var sc = shuffle(BANK.filter(function(q){ return q.t === 's'; }).slice()).slice(0, CFG.scenarios);
+    var mc = shuffle(BANK.filter(function(q){ return q.t === 'm'; }).slice()).slice(0, CFG.mcqs);
+    return sc.concat(mc).map(function(q){ return { id: q.id, ord: shuffle([0,1,2,3]) }; });
+  }
+
+  function startExam(){
+    if (run) return showRun();
+    var ei = examInfo(lastState || P.read());
+    if (ei.passed || ei.used >= CFG.maxAttempts) return;
+    if (!online) { $('exmsg').textContent = 'You need to be online to start the test.'; return; }
+    if (BANK.filter(function(q){ return q.t === 's'; }).length < CFG.scenarios ||
+        BANK.filter(function(q){ return q.t === 'm'; }).length < CFG.mcqs) {
+      $('exmsg').textContent = 'The question bank did not load. Reload the page.'; return;
+    }
+    if (!confirm('Start attempt ' + (ei.used + 1) + ' of ' + CFG.maxAttempts + '?\n\nThe 45-minute timer starts now and keeps running even if you close the page.')) return;
+    var now = Date.now();
+    run = { attemptNumber: ei.used + 1, startedAt: now, deadline: now + CFG.minutes * 60000, qs: draw(), ans: {} };
+    jSet(runKey(), run);
+    showRun();
+  }
+
+  function showRun(){
+    $('exintro').hidden = true; $('exresult').hidden = true; $('exarea').hidden = false;
+    var h = '', lastType = null;
+    run.qs.forEach(function(item, i){
+      var q = BYID[item.id]; if (!q) return;
+      if (q.t !== lastType) {
+        h += '<p class="xpart">' + (q.t === 's' ? 'Part 1: Scenarios. Choose the correct fix.' : 'Part 2: Multiple-choice questions') + '</p>';
+        lastType = q.t;
+      }
+      h += '<div class="xq"><p class="qn">Question ' + (i + 1) + ' of ' + run.qs.length + '</p><p class="gstem">' + esc(q.q) + '</p>';
+      if (q.code) h += '<pre class="code">' + esc(q.code) + '</pre>';
+      item.ord.forEach(function(oi){
+        var chk = run.ans[item.id] === oi ? ' checked' : '';
+        h += '<label class="gopt"><input type="radio" name="x' + item.id + '" data-q="' + item.id + '" value="' + oi + '"' + chk + '> <span>' + esc(q.o[oi]) + '</span></label>';
+      });
+      h += '</div>';
+    });
+    $('qlist').innerHTML = h;
+    $('qlist').querySelectorAll('input[type=radio]').forEach(function(r){
+      r.addEventListener('change', function(){
+        run.ans[r.getAttribute('data-q')] = parseInt(r.value, 10);
+        jSet(runKey(), run);
+        answered();
+      });
+    });
+    answered();
+    tick();
+    if (timerId) clearInterval(timerId);
+    timerId = setInterval(tick, 1000);
+  }
+
+  function answered(){
+    $('exanswered').textContent = Object.keys(run.ans).length + ' of ' + run.qs.length + ' answered';
+  }
+
+  function tick(){
+    if (!run) return;
+    var left = Math.max(0, run.deadline - Date.now());
+    var mm = Math.floor(left / 60000), ss = Math.floor((left % 60000) / 1000);
+    var t = $('timer');
+    t.textContent = String(mm).padStart(2, '0') + ':' + String(ss).padStart(2, '0') + ' left';
+    t.classList.toggle('low', left < 5 * 60000);
+    if (left <= 0) submitExam(true);
+  }
+
+  function submitExam(timeUp){
+    if (!run || submitting) return;
+    if (!timeUp) {
+      var n = Object.keys(run.ans).length;
+      var msg = n < run.qs.length ? 'You have answered ' + n + ' of ' + run.qs.length + ' questions. Unanswered questions count as wrong.\n\n' : '';
+      if (!confirm(msg + 'Submit attempt ' + run.attemptNumber + ' now?')) return;
+    }
+    submitting = true;
+    if (timerId) { clearInterval(timerId); timerId = null; }
+    var correct = 0, per = {}, byType = { s: { c: 0, t: 0 }, m: { c: 0, t: 0 } }, detail = [];
+    run.qs.forEach(function(item){
+      var q = BYID[item.id]; if (!q) return;
+      var chosen = run.ans.hasOwnProperty(item.id) ? run.ans[item.id] : null;
+      var ok = chosen === q.a;
+      if (ok) correct++;
+      per[q.m] = per[q.m] || { c: 0, t: 0 }; per[q.m].t++; if (ok) per[q.m].c++;
+      byType[q.t].t++; if (ok) byType[q.t].c++;
+      detail.push({ id: q.id, type: q.t === 's' ? 'scenario' : 'mcq', module: q.m, chosen: chosen, correct: ok });
+    });
+    var total = run.qs.length;
+    var pct = Math.round((correct / total) * 100);
+    var r = {
+      attemptNumber: run.attemptNumber, correct: correct, total: total, pct: pct, pass: pct >= CFG.passPct,
+      durationSeconds: Math.round((Math.min(Date.now(), run.deadline) - run.startedAt) / 1000),
+      timeUp: !!timeUp, detail: detail
+    };
+    run = null; jSet(runKey(), null);
+    showResult(r, per, byType);
+    P.recordExam(r).then(function(){
+      $('exsaved').textContent = 'Saved to your SF record.';
+    }).catch(function(e){
+      console.error('[exam] save failed', e);
+      jSet(pendKey(), r);
+      $('exsaved').textContent = 'Saved on this device. It will be sent to your SF record next time you open this page online.';
+    }).then(function(){ submitting = false; paint(P.read()); });
+  }
+
+  function showResult(r, per, byType){
+    $('exarea').hidden = true; $('exintro').hidden = false;
+    var h = '<div class="callout ' + (r.pass ? 'good' : 'caution') + '"><span class="tag">Attempt ' + r.attemptNumber + ' result</span>'
+      + '<p class="score ' + (r.pass ? 'pass' : 'fail') + '">' + r.pct + '% · ' + (r.pass ? 'Passed' : 'Not passed') + '</p>'
+      + '<p>' + r.correct + ' of ' + r.total + ' correct' + (r.timeUp ? ' (time ran out)' : '') + '. Pass mark ' + CFG.passPct + '%.</p></div>'
+      + '<table><tr><th>Part</th><th>Correct</th></tr>'
+      + '<tr><td>Scenarios</td><td>' + byType.s.c + ' of ' + byType.s.t + '</td></tr>'
+      + '<tr><td>Multiple-choice questions</td><td>' + byType.m.c + ' of ' + byType.m.t + '</td></tr></table>'
+      + '<table><tr><th>Module</th><th>Correct</th></tr>';
+    Object.keys(per).sort().forEach(function(m){
+      h += '<tr><td>' + m + '. ' + esc(MOD_NAMES[m] || '') + '</td><td>' + per[m].c + ' of ' + per[m].t + '</td></tr>';
+    });
+    h += '</table><p class="gstate" id="exsaved">Saving…</p>';
+    if (!r.pass) h += '<p>Review the modules where you scored lowest before your next attempt.</p>';
+    $('exresult').innerHTML = h; $('exresult').hidden = false;
+  }
+
+  window.SFAuth.mount(async function(u, signOut){
+    user = u;
+    $('who').innerHTML = (user.email || '') + ' <button class="signout" id="signout">Sign out</button>';
+    var so = $('signout');
+    if (so && signOut) so.onclick = function(){ signOut().then(function(){ location.reload(); }); };
+
+    run = jGet(runKey());
+    $('exstart').addEventListener('click', startExam);
+    $('exsubmit').addEventListener('click', function(){ submitExam(false); });
+
+    await P.start(user, null, function(state, isOnline){ online = !!isOnline; paint(state); });
+
+    /* A result that could not be saved earlier is sent now. */
+    var pend = jGet(pendKey());
+    if (pend && online) {
+      P.recordExam(pend).then(function(){ jSet(pendKey(), null); paint(P.read()); })
+        .catch(function(e){ console.error('[exam] pending save failed', e); });
+    }
+    /* An attempt left open: resume it, or submit it if time has run out. */
+    if (run) {
+      if (Date.now() >= run.deadline) submitExam(true);
+      else showRun();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
