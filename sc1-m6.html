@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<!-- build: 2026110601 -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6 &mdash; Authentication and sessions | Secure Coding: Basic to Intermediate</title>
+<style>
+:root{
+  --ink:#1B2124; --ink-2:#495259; --rule:#DFE3DE; --paper:#F6F7F5; --panel:#FFFFFF;
+  --level:#1a6eb5; --level-soft:#E8F1FA;
+  --lens:#B0721A; --lens-soft:#FBF4E7;
+  --verify:#41525F; --verify-soft:#EEF2F4;
+  --caution:#9E3025; --caution-soft:#FBEDEB;
+  --ok:#2E6B34; --ok-soft:#E9F2E9;
+  --serif: Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif;
+  --sans: ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono: ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 22px 90px}
+a{color:var(--level);text-decoration-thickness:1px;text-underline-offset:2px}
+.masthead{border-bottom:1px solid var(--rule);background:var(--panel)}
+.masthead .wrap{padding-top:38px;padding-bottom:30px}
+.crumb{font-family:var(--sans);font-size:13px;color:var(--ink-2);margin:0 0 14px}
+.who{float:right;font-size:12.5px;color:var(--ink-2)}
+.back{color:var(--level);text-decoration:none;font-weight:600}
+.back:hover{text-decoration:underline}
+.signout{background:none;border:0;color:var(--level);font-size:12.5px;cursor:pointer;
+  text-decoration:underline;font-family:inherit;padding:0}
+.chip{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:.02em;
+  color:#fff;background:var(--level);border-radius:3px;padding:3px 9px;margin-right:8px}
+h1{font-family:var(--sans);font-weight:640;font-size:31px;line-height:1.2;margin:0 0 10px;letter-spacing:-.015em}
+.deck{font-size:18px;color:var(--ink-2);margin:0;max-width:64ch}
+.facts{display:flex;flex-wrap:wrap;gap:22px;margin-top:22px;padding-top:18px;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:13.5px;color:var(--ink-2)}
+.facts b{display:block;color:var(--ink);font-weight:600}
+.progress{position:sticky;top:0;z-index:20;background:rgba(246,247,245,.94);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+.progress .wrap{display:flex;align-items:center;gap:14px;padding-top:9px;padding-bottom:9px}
+.bar{flex:1;height:4px;background:var(--rule);border-radius:2px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--level);transition:width .25s ease}
+.count{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+h2{font-family:var(--sans);font-weight:640;font-size:22px;line-height:1.25;margin:0;letter-spacing:-.01em}
+h3{font-family:var(--sans);font-weight:620;font-size:16px;margin:26px 0 8px}
+p{margin:0 0 14px;max-width:72ch}
+ul,ol{max-width:72ch;padding-left:22px}
+li{margin-bottom:7px}
+section.stage{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.stage-head{display:flex;gap:16px;align-items:baseline;margin-bottom:6px}
+.num{font-family:var(--mono);font-size:14px;color:var(--level);border:1px solid var(--level);
+  border-radius:50%;width:30px;height:30px;min-width:30px;display:flex;align-items:center;
+  justify-content:center;align-self:flex-start;margin-top:2px}
+.num.ok{background:var(--level);color:#fff}
+.goal{font-family:var(--sans);font-size:14px;color:var(--ink-2);margin:0 0 18px 46px}
+.stage-body{margin-left:46px}
+.callout{border-radius:5px;padding:14px 16px;margin:0 0 16px;font-size:15.5px}
+.callout p{margin:0;max-width:66ch}
+.callout p+p{margin-top:9px}
+.callout ul{margin:6px 0 0;font-size:15px}
+.callout .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;display:block;margin-bottom:5px}
+.lens{background:var(--lens-soft);border-left:3px solid var(--lens)}
+.lens .tag{color:var(--lens)}
+.verify{background:var(--verify-soft);border-left:3px dashed var(--verify)}
+.verify .tag{color:var(--verify)}
+.caution{background:var(--caution-soft);border-left:3px solid var(--caution)}
+.caution .tag{color:var(--caution)}
+.good{background:var(--ok-soft);border-left:3px solid var(--ok)}
+.good .tag{color:var(--ok)}
+.done{background:var(--level-soft);border-radius:5px;padding:16px 18px;margin-top:26px}
+.done .tag{font-family:var(--sans);font-size:12.5px;font-weight:640;color:var(--level);display:block;margin-bottom:8px}
+.done label{display:flex;gap:11px;align-items:flex-start;font-size:15.5px;cursor:pointer;margin:0}
+.done input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.done label.checked{color:var(--ink-2)}
+.done .sync{font-family:var(--sans);font-size:12px;color:var(--ink-2);margin:9px 0 0 27px;min-height:15px}
+.done input:disabled{accent-color:#B9C2BA}
+.done label.locked{color:#8D979C;cursor:not-allowed}
+.orient{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:26px 28px;margin:26px 0}
+.secdone{display:flex;gap:10px;align-items:center;font-family:var(--sans);font-size:14px;color:var(--ink-2);
+  border-top:1px solid var(--rule);margin-top:22px;padding-top:14px;cursor:pointer}
+.secdone input{accent-color:var(--level);width:16px;height:16px;flex:none}
+.secdone.ticked{color:var(--level);font-weight:600}
+section.stage.check{border-color:#C9DAEA;background:#FCFDFE}
+.gstem{font-weight:600;margin:0 0 12px}
+.gq{margin-bottom:26px}
+.gopt{display:flex;gap:11px;align-items:flex-start;font-size:16px;margin-bottom:8px;cursor:pointer;max-width:72ch}
+.gopt input{margin-top:6px;accent-color:var(--level);width:16px;height:16px;flex:none}
+.gopt input:disabled+span{color:var(--ink-2)}
+.gfb{margin-top:12px}
+.gfb .callout{margin-bottom:0}
+.gactions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.gstate{font-family:var(--sans);font-size:13px;color:var(--ink-2)}
+button.pbtn{border:0;cursor:pointer;font-family:var(--sans)}
+.recap{font-family:var(--sans);font-size:15px;color:var(--ink-2);border-top:1px solid var(--rule);
+  margin-top:24px;padding-top:16px}
+.recap b{color:var(--ink);font-weight:620}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:34px 0 0;flex-wrap:wrap}
+.pbtn{display:inline-block;background:var(--level);color:#fff;text-decoration:none;
+  font-family:var(--sans);font-size:14.5px;font-weight:600;padding:11px 22px;border-radius:8px}
+.pbtn:hover{filter:brightness(1.08)}
+.pbtn.ghost{background:none;color:var(--level);border:1.5px solid var(--level)}
+.pbtn.off,.pbtn:disabled{background:none;color:#A9B2B6;border:1.5px solid var(--rule);pointer-events:none}
+table{border-collapse:collapse;width:100%;font-size:15px;margin:0 0 16px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--sans);font-size:13px;font-weight:620}
+td code,li code,p code{font-family:var(--mono);font-size:.86em;background:#EEF2F4;border-radius:3px;padding:1px 5px}
+.fname{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);margin:0 0 4px}
+pre.code{background:#122130;color:#E3EAF1;font-family:var(--mono);font-size:13.5px;line-height:1.55;
+  padding:14px 16px;border-radius:6px;overflow-x:auto;margin:0 0 16px;white-space:pre}
+pre.code .c{color:#8FA3B5}
+pre.term{background:#1B2124;color:#D8E0D9}
+figure{margin:0 0 22px}
+figcaption{font-family:var(--sans);font-size:12.5px;color:var(--ink-2);margin-top:8px}
+svg{width:100%;height:auto;display:block}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding-top:18px;
+  font-family:var(--sans);font-size:12.5px;color:var(--ink-2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media (max-width:620px){
+  body{font-size:16px}
+  .stage-body,.goal{margin-left:0}
+  .stage-head{gap:12px}
+  section.stage,.orient{padding:20px 18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<style>
+  details.lang{border:1px solid var(--rule);border-radius:6px;margin:0 0 10px;background:var(--panel)}
+  details.lang>summary{cursor:pointer;list-style:none;font-family:var(--sans);font-size:14.5px;font-weight:600;
+    padding:10px 14px;display:flex;align-items:center;gap:10px}
+  details.lang>summary::-webkit-details-marker{display:none}
+  details.lang>summary::before{content:"\25B8";color:var(--level);font-size:13px;width:12px}
+  details.lang[open]>summary::before{content:"\25BE"}
+  details.lang>summary:hover{background:var(--level-soft)}
+  details.lang>.lbody{padding:4px 16px 4px}
+  .langbar{display:flex;gap:10px;font-family:var(--sans);font-size:12.5px;margin:0 0 8px}
+  .langbar button{background:none;border:0;color:var(--level);cursor:pointer;padding:0;text-decoration:underline;font-family:inherit;font-size:inherit}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <p class="crumb"><span id="who" class="who"></span><a class="back" href="index.html?v=2026110601">&#8592; Dashboard</a> &middot; SF Knowledge Hub &middot; Secure Coding: Basic to Intermediate</p>
+    <p><span class="chip">Module 6 of 6</span></p>
+    <h1>Authentication and sessions</h1>
+    <p class="deck">Make sign-in hard to guess or abuse, and keep sessions safe once the user is signed in.</p>
+    <div class="facts"><div><b>Time</b>About 3 hours</div><div><b>Sections</b>4, each with a finish box</div><div><b>OWASP</b>A07:2025 Authentication Failures</div><div><b>Completion</b>All sections, check questions (70%), then the box at the end</div></div>
+  </div>
+</header>
+
+<div class="progress"><div class="wrap">
+  <div class="bar"><span id="fill"></span></div>
+  <div class="count" id="count">Loading progress&hellip;</div>
+</div></div>
+
+<div class="wrap">
+
+<div class="orient">
+<h2>Before you begin</h2>
+<p>If an attacker can sign in as someone else, every other control is bypassed. This module covers password rules, limits on guessing, multi-factor authentication, session cookies and JSON Web Tokens.</p>
+<p>This is the last module before the final test. Have Juice Shop ready.</p>
+</div>
+
+<section class="stage" id="sec-1">
+  <div class="stage-head"><div class="num" id="num-1">1</div><h2>Theory: passwords, sign-in and sessions</h2></div>
+  <p class="goal">Current password rules, stopping guessing attacks, and keeping sessions and tokens safe.</p>
+  <div class="stage-body">
+
+<h3>Passwords</h3>
+<p>NIST SP 800-63B (revision 4, 2025) sets these rules for passwords:</p>
+<ul>
+<li>At least <b>15 characters</b> when the password is the only factor, and at least <b>8</b> when it is used with multi-factor authentication.</li>
+<li>Allow at least <b>64 characters</b>, and allow spaces and all characters, so people can use passphrases.</li>
+<li><b>No composition rules</b> such as "must contain a symbol", and <b>no forced changes</b> every few months. Ask for a change only when there is a sign the password was leaked.</li>
+<li><b>Check new passwords against lists of breached and common passwords</b>, such as <code>admin123</code> or <code>Password1</code>.</li>
+<li>Store passwords with a slow, salted hash (Module 4).</li>
+</ul>
+<h3>Stopping guessing attacks</h3>
+<ul>
+<li><b>Credential stuffing:</b> attackers try username and password pairs leaked from other sites. <b>Brute force:</b> they try many passwords for one account.</li>
+<li><b>Limit failed attempts</b> per account and per source, with growing delays or a temporary block. NIST sets an upper limit of 100 failures in a row before an account must be locked.</li>
+<li><b>Offer multi-factor authentication (MFA)</b>, and require it for admin accounts. Prefer app-based codes, security keys or passkeys over SMS.</li>
+<li><b>Give the same message</b> for "no such user" and "wrong password", so attackers cannot find out which accounts exist.</li>
+</ul>
+<h3>Sessions</h3>
+<p>After sign-in, a <b>session</b> remembers who the user is, usually through a cookie that holds a random session ID.</p>
+<table>
+<tr><th>Practice</th><th>Why</th></tr>
+<tr><td>Create a new session ID when the user signs in</td><td>Stops session fixation, where an attacker plants a known session ID before the user signs in.</td></tr><tr><td>Set the cookie flags <code>HttpOnly</code>, <code>Secure</code> and <code>SameSite=Lax</code> (or <code>Strict</code>)</td><td>Scripts cannot read the cookie, it is only sent over HTTPS, and other sites cannot easily send it with their requests.</td></tr><tr><td>End sessions on the server at sign-out, and after a period of no activity</td><td>A stolen session ID stops working.</td></tr><tr><td>Do not put session IDs or tokens in URLs or browser storage</td><td>URLs end up in logs and browser history, and any script on the page can read <code>localStorage</code>.</td></tr>
+</table>
+<h3>JSON Web Tokens (JWT)</h3>
+<ul>
+<li>Check the signature on every request, and allow only the algorithm you expect. Never accept <code>alg: none</code>.</li>
+<li>Set a short expiry (<code>exp</code>) and check it, and check the issuer and audience.</li>
+<li>Do not put secrets or personal data in a JWT. Its contents are only encoded, as you saw in Module 4.</li>
+</ul>
+    <label class="secdone" id="sd-1"><input type="checkbox" class="sec" data-sec="1" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-2">
+  <div class="stage-head"><div class="num" id="num-2">2</div><h2>OWASP mapping</h2></div>
+  <p class="goal">Where these weaknesses sit in the OWASP Top 10:2025, with their CWE numbers.</p>
+  <div class="stage-body">
+
+<p>This module maps to <b>A07:2025 Authentication Failures</b>, which was called "Identification and Authentication Failures" in 2021.</p>
+<table>
+<tr><th>Weakness</th><th>CWE</th><th>OWASP Top 10:2025</th></tr>
+<tr><td>No limit on failed sign-in attempts</td><td>CWE-307: Improper Restriction of Excessive Authentication Attempts</td><td>A07 Authentication Failures</td></tr><tr><td>Weak or common passwords are accepted</td><td>CWE-521: Weak Password Requirements</td><td>A07 Authentication Failures</td></tr><tr><td>The session ID is not changed at sign-in</td><td>CWE-384: Session Fixation</td><td>A07 Authentication Failures</td></tr><tr><td>Sessions do not end, or end only in the browser</td><td>CWE-613: Insufficient Session Expiration</td><td>A07 Authentication Failures</td></tr><tr><td>A default or built-in password is used</td><td>CWE-1393: Use of Default Password</td><td>A07 Authentication Failures</td></tr>
+</table><div class="callout caution"><span class="tag">Watch out</span><p>Cookie flags and session handling are often set once in a shared configuration file and never checked again. Review them whenever the framework or hosting changes.</p></div>
+    <label class="secdone" id="sd-2"><input type="checkbox" class="sec" data-sec="2" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-3">
+  <div class="stage-head"><div class="num" id="num-3">3</div><h2>Fixes: cookie flags, new sessions and token checks</h2></div>
+  <p class="goal">A sign-in flow with the weakness and fixed, in each language.</p>
+  <div class="stage-body">
+
+<p>The examples show a sign-in flow. The fix in every language: secure cookie flags, a short session lifetime, a new session at sign-in, one message for every failed sign-in, and a limit on attempts. The TypeScript block shows how to check a JWT properly.</p>
+<div class="langbar"><button type="button" data-lang="open">Expand all</button><button type="button" data-lang="close">Collapse all</button></div>
+<details class="lang"><summary>Node.js</summary><div class="lbody">
+<p>Express with express-session.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">app.use(session({ secret: "keyboard cat" }));     <span class="c">// default cookie settings</span>
+
+app.post("/login", async (req, res) =&gt; {
+  const user = await checkPassword(req.body.email, req.body.password);
+  if (!user) return res.status(401).send("Wrong password for " + req.body.email);
+  req.session.userId = user.id;                     <span class="c">// same session ID as before sign-in</span>
+  res.redirect("/");
+});</pre>
+<p class="fname">Fixed</p>
+<pre class="code">app.use(session({
+  secret: process.env.SESSION_SECRET,               <span class="c">// from a secret store, not the code</span>
+  cookie: { httpOnly: true, secure: true, sameSite: "lax", maxAge: 30 * 60 * 1000 },
+}));
+
+app.post("/login", loginLimiter, async (req, res, next) =&gt; {
+  const user = await checkPassword(req.body.email, req.body.password);
+  if (!user) return res.status(401).send("Email or password is incorrect");
+  req.session.regenerate((err) =&gt; {                 <span class="c">// new session ID at sign-in</span>
+    if (err) return next(err);
+    req.session.userId = user.id;
+    res.redirect("/");
+  });
+});</pre>
+</div></details>
+<details class="lang"><summary>JavaScript (browser)</summary><div class="lbody">
+<p>Where the browser keeps the sign-in token matters.</p>
+<p class="fname">With the weakness</p>
+<pre class="code"><span class="c">// Any script on the page, including injected ones, can read this</span>
+localStorage.setItem("token", data.token);</pre>
+<p class="fname">Fixed</p>
+<pre class="code"><span class="c">// The server sets the session cookie with HttpOnly, so scripts cannot read it.</span>
+<span class="c">// The browser sends it automatically:</span>
+await fetch("/api/profile", { credentials: "same-origin" });</pre>
+</div></details>
+<details class="lang"><summary>TypeScript</summary><div class="lbody">
+<p>Checking a JWT with the jose library: expected algorithm, issuer, audience and expiry.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64url").toString());
+<span class="c">// the signature is never checked</span></pre>
+<p class="fname">Fixed</p>
+<pre class="code">import { jwtVerify } from "jose";
+
+const { payload } = await jwtVerify(token, publicKey, {
+  algorithms: ["RS256"],            <span class="c">// only the algorithm you use</span>
+  issuer: "https://login.example.com",
+  audience: "shop-api",
+});                                 <span class="c">// also rejects expired tokens</span></pre>
+</div></details>
+<details class="lang"><summary>Python</summary><div class="lbody">
+<p>Flask. Set the cookie flags in the app settings and clear the old session at sign-in.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">app.config["SESSION_COOKIE_SECURE"] = False
+
+@app.post("/login")
+def login():
+    user = check_password(request.form["email"], request.form["password"])
+    session["user_id"] = user.id</pre>
+<p class="fname">Fixed</p>
+<pre class="code">app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    PERMANENT_SESSION_LIFETIME=timedelta(minutes=30),
+)
+
+@app.post("/login")
+def login():
+    user = check_password(request.form["email"], request.form["password"])
+    if user is None:
+        abort(401, "Email or password is incorrect")
+    session.clear()                  <span class="c"># start a fresh session at sign-in</span>
+    session["user_id"] = user.id</pre>
+</div></details>
+<details class="lang"><summary>Java</summary><div class="lbody">
+<p>Spring Boot with Spring Security, which changes the session ID at sign-in by default.</p>
+<p class="fname">With the weakness</p>
+<pre class="code"><span class="c"># application.properties</span>
+server.servlet.session.cookie.secure=false
+server.servlet.session.timeout=7d</pre>
+<p class="fname">Fixed</p>
+<pre class="code"><span class="c"># application.properties</span>
+server.servlet.session.cookie.http-only=true
+server.servlet.session.cookie.secure=true
+server.servlet.session.cookie.same-site=lax
+server.servlet.session.timeout=30m
+
+// SecurityConfig.java: keep session fixation protection on (the default)
+http.sessionManagement(s -&gt; s.sessionFixation(f -&gt; f.changeSessionId()));</pre>
+</div></details>
+<details class="lang"><summary>C#</summary><div class="lbody">
+<p>ASP.NET Core cookie authentication.</p>
+<p class="fname">With the weakness</p>
+<pre class="code">builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(o =&gt; o.ExpireTimeSpan = TimeSpan.FromDays(30));</pre>
+<p class="fname">Fixed</p>
+<pre class="code">builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(o =&gt;
+    {
+        o.Cookie.HttpOnly = true;
+        o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        o.Cookie.SameSite = SameSiteMode.Lax;
+        o.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        o.SlidingExpiration = true;
+    });
+<span class="c">// Also add a rate limiter (builder.Services.AddRateLimiter) to POST /login</span></pre>
+</div></details><div class="callout good"><span class="tag">Recommended practice</span><ul>
+<li>Use your framework's built-in sign-in and session features, or a trusted identity provider, rather than writing your own.</li>
+<li>Apply rate limits to every place a password or code is checked: sign-in, password reset and MFA codes.</li>
+<li>Log failed sign-ins, and alert on many failures for one account or from one source.</li>
+</ul></div>
+    <label class="secdone" id="sd-3"><input type="checkbox" class="sec" data-sec="3" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage" id="sec-4">
+  <div class="stage-head"><div class="num" id="num-4">4</div><h2>Lab: guess a weak password, then limit attempts</h2></div>
+  <p class="goal">Part A: the Password Strength challenge in Juice Shop. Part B: a sign-in attempt limit in your language.</p>
+  <div class="stage-body">
+
+<h3>Part A: guess a weak admin password in Juice Shop</h3>
+<p>Start Juice Shop on <code>127.0.0.1</code>. Sign out if you are signed in.</p>
+<ol>
+<li>The administrator's email address is <code>admin@juice-sh.op</code>. It is the account you signed in as in Module 5.</li>
+<li>On the <b>Login</b> page, try that email with a few very common passwords, such as <code>password</code>, <code>admin</code> and <code>admin123</code>.</li>
+</ol>
+<p>One of them works, and Juice Shop shows a banner for the <b>Password Strength</b> challenge. Notice two problems: the password is on every list of common passwords, and the site never slowed you down or blocked you after failed tries.</p>
+<p>While signed in, open the developer tools and look at <b>Application</b> (or <b>Storage</b>) for <code>http://localhost:3000</code>. Note that the sign-in token is kept where any script on the page can read it.</p>
+
+<h3>Part B: add a sign-in attempt limit</h3>
+<p>Each starter runs eight sign-in attempts, at the minute shown. Complete the three functions so that an account is blocked after 5 failed attempts within 15 minutes, a successful sign-in clears its failures, and other accounts are not affected.</p>
+<table>
+<tr><th>Attempt</th><th>Minute</th><th>Account</th><th>Password</th><th>Expected</th></tr>
+<tr><td>1 to 5</td><td>0 to 4</td><td>alice</td><td>wrong</td><td>wrong password</td></tr><tr><td>6</td><td>5</td><td>alice</td><td>right</td><td>blocked</td></tr><tr><td>7</td><td>5</td><td>bob</td><td>right</td><td>signed in</td></tr><tr><td>8</td><td>20</td><td>alice</td><td>right</td><td>signed in</td></tr>
+</table>
+<p>Attempt 8 is allowed because, at minute 20, all of alice's failures are 15 or more minutes old.</p>
+<div class="langbar"><button type="button" data-lang="open">Expand all</button><button type="button" data-lang="close">Collapse all</button></div>
+<details class="lang"><summary>Node.js</summary><div class="lbody">
+<p class="fname">limiter.mjs</p><pre class="code">const MAX_FAILURES = 5;
+const WINDOW_MINUTES = 15;
+const failures = new Map();       <span class="c">// account -&gt; list of minutes when a sign-in failed</span>
+
+<span class="c">// TODO: return false when the account has 5 or more failures in the last 15 minutes</span>
+function allowAttempt(account, now) {
+  return true;
+}
+<span class="c">// TODO: remember the time of this failure</span>
+function recordFailure(account, now) {}
+<span class="c">// TODO: forget the account's failures</span>
+function recordSuccess(account) {}
+
+const events = [
+  [0, "alice", false],
+  [1, "alice", false],
+  [2, "alice", false],
+  [3, "alice", false],
+  [4, "alice", false],
+  [5, "alice", true],
+  [5, "bob", true],
+  [20, "alice", true],
+];
+
+events.forEach(([minute, account, passwordOk], i) =&gt; {
+  let result;
+  if (!allowAttempt(account, minute)) result = "blocked";
+  else if (passwordOk) { recordSuccess(account); result = "signed in"; }
+  else { recordFailure(account, minute); result = "wrong password"; }
+  console.log(i + 1, "minute " + minute, account, result);
+});</pre><pre class="code term">node limiter.mjs</pre>
+</div></details>
+<details class="lang"><summary>TypeScript</summary><div class="lbody">
+<p class="fname">limiter.ts</p><pre class="code">const MAX_FAILURES = 5;
+const WINDOW_MINUTES = 15;
+const failures = new Map&lt;string, number[]&gt;();
+
+<span class="c">// TODO: return false when the account has 5 or more failures in the last 15 minutes</span>
+function allowAttempt(account: string, now: number): boolean {
+  return true;
+}
+<span class="c">// TODO: remember the time of this failure</span>
+function recordFailure(account: string, now: number): void {}
+<span class="c">// TODO: forget the account's failures</span>
+function recordSuccess(account: string): void {}
+
+const events = [
+  [0, "alice", false],
+  [1, "alice", false],
+  [2, "alice", false],
+  [3, "alice", false],
+  [4, "alice", false],
+  [5, "alice", true],
+  [5, "bob", true],
+  [20, "alice", true],
+];
+
+events.forEach(([minute, account, passwordOk], i) =&gt; {
+  let result: string;
+  if (!allowAttempt(account as string, minute as number)) result = "blocked";
+  else if (passwordOk) { recordSuccess(account as string); result = "signed in"; }
+  else { recordFailure(account as string, minute as number); result = "wrong password"; }
+  console.log(i + 1, "minute " + minute, account, result);
+});</pre><pre class="code term">npx tsx limiter.ts</pre>
+</div></details>
+<details class="lang"><summary>Python</summary><div class="lbody">
+<p class="fname">limiter.py</p><pre class="code">MAX_FAILURES = 5
+WINDOW_MINUTES = 15
+failures = {}   <span class="c"># account -&gt; list of minutes when a sign-in failed</span>
+
+def allow_attempt(account, now):
+    <span class="c"># TODO: return False when the account has 5 or more failures in the last 15 minutes</span>
+    return True
+
+def record_failure(account, now):
+    <span class="c"># TODO: remember the time of this failure</span>
+    pass
+
+def record_success(account):
+    <span class="c"># TODO: forget the account's failures</span>
+    pass
+
+EVENTS = [
+    (0, "alice", False),
+    (1, "alice", False),
+    (2, "alice", False),
+    (3, "alice", False),
+    (4, "alice", False),
+    (5, "alice", True),
+    (5, "bob", True),
+    (20, "alice", True),
+]
+
+for i, (minute, account, password_ok) in enumerate(EVENTS, 1):
+    if not allow_attempt(account, minute):
+        result = "blocked"
+    elif password_ok:
+        record_success(account)
+        result = "signed in"
+    else:
+        record_failure(account, minute)
+        result = "wrong password"
+    print(i, f"minute {minute}", account, result)</pre><pre class="code term">python3 limiter.py</pre>
+</div></details>
+<details class="lang"><summary>Java</summary><div class="lbody">
+<p class="fname">Limiter.java</p><pre class="code">import java.util.*;
+
+public class Limiter {
+    static final int MAX_FAILURES = 5;
+    static final int WINDOW_MINUTES = 15;
+    static final Map&lt;String, List&lt;Integer&gt;&gt; failures = new HashMap&lt;&gt;();
+
+    <span class="c">// TODO: return false when the account has 5 or more failures in the last 15 minutes</span>
+    static boolean allowAttempt(String account, int now) {
+        return true;
+    }
+    <span class="c">// TODO: remember the time of this failure</span>
+    static void recordFailure(String account, int now) {}
+    <span class="c">// TODO: forget the account's failures</span>
+    static void recordSuccess(String account) {}
+
+    public static void main(String[] args) {
+        Object[][] events = {
+            {0, "alice", false},
+            {1, "alice", false},
+            {2, "alice", false},
+            {3, "alice", false},
+            {4, "alice", false},
+            {5, "alice", true},
+            {5, "bob", true},
+            {20, "alice", true}
+        };
+        for (int i = 0; i &lt; events.length; i++) {
+            int minute = (Integer) events[i][0];
+            String account = (String) events[i][1];
+            boolean passwordOk = (Boolean) events[i][2];
+            String result;
+            if (!allowAttempt(account, minute)) result = "blocked";
+            else if (passwordOk) { recordSuccess(account); result = "signed in"; }
+            else { recordFailure(account, minute); result = "wrong password"; }
+            System.out.println((i + 1) + " minute " + minute + " " + account + " " + result);
+        }
+    }
+}</pre><pre class="code term">java Limiter.java</pre>
+</div></details>
+<details class="lang"><summary>C#</summary><div class="lbody">
+<pre class="code term">dotnet new console -o sc-m6-cs
+cd sc-m6-cs</pre><p class="fname">Program.cs</p><pre class="code">const int MaxFailures = 5;
+const int WindowMinutes = 15;
+var failures = new Dictionary&lt;string, List&lt;int&gt;&gt;();
+
+var events = new (int Minute, string Account, bool PasswordOk)[]
+{
+    (0, "alice", false),
+    (1, "alice", false),
+    (2, "alice", false),
+    (3, "alice", false),
+    (4, "alice", false),
+    (5, "alice", true),
+    (5, "bob", true),
+    (20, "alice", true)
+};
+
+for (int i = 0; i &lt; events.Length; i++)
+{
+    var (minute, account, passwordOk) = events[i];
+    string result;
+    if (!AllowAttempt(account, minute)) result = "blocked";
+    else if (passwordOk) { RecordSuccess(account); result = "signed in"; }
+    else { RecordFailure(account, minute); result = "wrong password"; }
+    Console.WriteLine($"{i + 1} minute {minute} {account} {result}");
+}
+
+<span class="c">// TODO: return false when the account has 5 or more failures in the last 15 minutes</span>
+bool AllowAttempt(string account, int now) =&gt; true;
+<span class="c">// TODO: remember the time of this failure</span>
+void RecordFailure(string account, int now) { }
+<span class="c">// TODO: forget the account's failures</span>
+void RecordSuccess(string account) { }</pre><pre class="code term">dotnet run</pre>
+</div></details><div class="callout lens"><span class="tag">Hint</span><p>In <code>allowAttempt</code>, keep only the failures where <code>now - time &lt; 15</code>, then compare how many are left with 5.</p></div><div class="callout verify"><span class="tag">Check your work</span><ul><li>Juice Shop showed the Password Strength banner</li><li>Your program prints "wrong password" five times, then "blocked", "signed in" and "signed in"</li><li>Juice Shop is stopped</li></ul></div>
+    <label class="secdone" id="sd-4"><input type="checkbox" class="sec" data-sec="4" disabled> I have finished this section</label>
+  </div>
+</section>
+
+<section class="stage check">
+  <div class="stage-head"><div class="num">?</div><h2>Check your understanding</h2></div>
+  <p class="goal">Answer at least 4 of the 5 questions correctly (70%) to unlock the completion box. You can try as many times as you need.</p>
+  <div class="stage-body">
+    <div class="gq" data-i="0">
+      <p class="gstem">1. Under NIST SP 800-63B revision 4, what is the minimum password length when the password is the only factor?</p>
+      <label class="gopt"><input type="radio" name="g0" value="0"> <span>8 characters</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="1"> <span>10 characters</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="2"> <span>12 characters</span></label>
+      <label class="gopt"><input type="radio" name="g0" value="3"> <span>15 characters</span></label>
+      <div class="gfb" id="gfb-0"></div>
+    </div>
+    <div class="gq" data-i="1">
+      <p class="gstem">2. Which password rule does NIST now say NOT to use?</p>
+      <label class="gopt"><input type="radio" name="g1" value="0"> <span>Check new passwords against lists of breached passwords</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="1"> <span>Allow passwords of at least 64 characters</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="2"> <span>Require a mix of upper case, numbers and symbols</span></label>
+      <label class="gopt"><input type="radio" name="g1" value="3"> <span>Allow spaces in passwords</span></label>
+      <div class="gfb" id="gfb-1"></div>
+    </div>
+    <div class="gq" data-i="2">
+      <p class="gstem">3. Why should a new session ID be created when a user signs in?</p>
+      <label class="gopt"><input type="radio" name="g2" value="0"> <span>To make the cookie smaller</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="1"> <span>To stop session fixation, where an attacker plants a session ID before sign-in</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="2"> <span>To make the page load faster</span></label>
+      <label class="gopt"><input type="radio" name="g2" value="3"> <span>Because session IDs can only be used once</span></label>
+      <div class="gfb" id="gfb-2"></div>
+    </div>
+    <div class="gq" data-i="3">
+      <p class="gstem">4. Which cookie setting stops scripts on the page from reading the session cookie?</p>
+      <label class="gopt"><input type="radio" name="g3" value="0"> <span>Secure</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="1"> <span>SameSite=Lax</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="2"> <span>HttpOnly</span></label>
+      <label class="gopt"><input type="radio" name="g3" value="3"> <span>Max-Age</span></label>
+      <div class="gfb" id="gfb-3"></div>
+    </div>
+    <div class="gq" data-i="4">
+      <p class="gstem">5. The sign-in page says "No account with that email" for unknown users and "Wrong password" for known ones. What is the problem?</p>
+      <label class="gopt"><input type="radio" name="g4" value="0"> <span>Nothing, it is helpful to users</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="1"> <span>Attackers can find out which email addresses have accounts</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="2"> <span>It makes passwords easier to crack offline</span></label>
+      <label class="gopt"><input type="radio" name="g4" value="3"> <span>It breaks multi-factor authentication</span></label>
+      <div class="gfb" id="gfb-4"></div>
+    </div>
+    <div class="gactions"><button class="pbtn" id="gcheck">Check answers</button><span class="gstate" id="gstate"></span></div>
+    <p class="recap"><b>Module recap.</b> Follow current password rules: length, no composition rules, and breached-password checks. Limit failed attempts and offer MFA. Create a new session at sign-in, set HttpOnly, Secure and SameSite on the cookie, end sessions on the server, and check every part of a JWT.</p>
+  </div>
+</section>
+
+<div class="done">
+  <span class="tag">Completion</span>
+  <label id="lbl"><input type="checkbox" id="cmplt" disabled> I have finished Module 6: Authentication and sessions.</label>
+  <p class="sync" id="sync"></p>
+</div>
+
+<div class="pager">
+  <a class="pbtn ghost" href="sc1-m5.html?v=2026110601">&#8592; Module 5</a>
+  <a class="pbtn off" id="nextbtn" href="sc1-exam.html?v=2026110601">Final test &#8594;</a>
+</div>
+
+<footer>
+  <div>SF Knowledge Hub &middot; Secure Coding: Basic to Intermediate &middot; Module 6 of 6</div>
+  <div>build 2026110601</div>
+</footer>
+
+</div>
+<!-- SF auth gate: Google SSO or email/password sign-in. -->
+<script>
+(function () {
+  /* Live config for sfcertification-grafana. */
+  const firebaseConfig = {
+    apiKey: "__FIREBASE_API_KEY__",
+    authDomain: "sfcertification-grafana.firebaseapp.com",
+    projectId: "sfcertification-grafana",
+    storageBucket: "sfcertification-grafana.firebasestorage.app",
+    messagingSenderId: "227322696511",
+    appId: "1:227322696511:web:12e7ced7dd3d45fa06798a"
+  };
+  const ALLOWED_DOMAIN = "sourcefuse.com";
+  /* Admins: always allowed in, without a nomination. */
+  const ADMINS = ["jv.ravichandran@sourcefuse.com", "noushin.khan@sourcefuse.com"];
+
+  /* `courses` document id for this course. Nominations are read from
+     courses/{COURSE_ID}/nominations/{email}, managed in the SF Knowledge Hub. */
+  const COURSE_ID = "__SC1_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  /* True when the page is shown inside another page (the SF Knowledge Hub). */
+  const IN_FRAME = (function(){ try { return window.self !== window.top; } catch (_) { return true; } })();
+
+  let auth, GoogleProvider, signInPopup, signInEmail, onAuth, signOutFn, setPersist, localPersist, readNomination;
+  let readyCb = null;
+
+  async function initFirebase() {
+    const appMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const authMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+    const app = appMod.getApps().length ? appMod.getApp() : appMod.initializeApp(firebaseConfig);
+    auth = authMod.getAuth(app);
+    GoogleProvider = authMod.GoogleAuthProvider;
+    signInPopup    = (p) => authMod.signInWithPopup(auth, p);
+    signInEmail    = (e, pw) => authMod.signInWithEmailAndPassword(auth, e, pw);
+    onAuth         = (cb) => authMod.onAuthStateChanged(auth, cb);
+    signOutFn      = () => authMod.signOut(auth);
+    setPersist     = authMod.setPersistence;
+    localPersist   = authMod.browserLocalPersistence;
+    try { await setPersist(auth, localPersist); } catch (_) {}
+    const fsMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+    const db = fsMod.getFirestore(app);
+    readNomination = (email) => fsMod.getDoc(fsMod.doc(db, "courses", COURSE_ID, "nominations", email));
+  }
+
+  function styleTag(){return `<style>
+    .sf-auth-backdrop{position:fixed;inset:0;background:rgba(16,38,60,.55);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+    .sf-auth-card{background:#fff;border-radius:22px;padding:42px 36px 38px;width:100%;max-width:420px;box-shadow:0 12px 40px rgba(10,30,55,.25);text-align:center;font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    .sf-auth-badge{display:inline-block;background:var(--level,#1a6eb5);color:#fff;font-weight:700;font-size:12px;padding:4px 11px;border-radius:14px;margin-bottom:14px}
+    .sf-auth-card h2{margin:0 0 12px;font-size:19px;font-weight:700;line-height:1.3;color:#15212d;font-family:inherit}
+    .sf-auth-sub{margin:0 auto 26px;max-width:330px;color:#5e6b79;font-size:14.5px;line-height:1.6}
+    .sf-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#366db0;color:#fff;border:0;border-radius:9px;padding:15px;font-size:15.5px;font-weight:600;cursor:pointer;font-family:inherit}
+    .sf-btn:hover{background:#2e5f9b}
+    .sf-btn svg{width:19px;height:19px;flex:none}
+    .sf-or{margin:20px 0;color:#9da7b2;font-size:11.5px;font-weight:500;letter-spacing:.14em}
+    .sf-inp{display:block;width:100%;box-sizing:border-box;border:1.5px solid #dfe5eb;border-radius:9px;padding:13px 14px;font-size:15px;margin:0 0 9px;color:#15212d;background:#fff;font-family:inherit}
+    .sf-inp::placeholder{color:#757575}
+    .sf-inp:focus{outline:none;border-color:#366db0}
+    .sf-err{color:#b5341a;font-size:13px;margin-top:12px;min-height:16px;line-height:1.5}
+    .sf-frame{color:#5e6b79;font-size:12.5px;line-height:1.55;margin:14px 0 0}
+    .sf-frame a{color:#366db0}
+  </style>`;}
+
+  function signinHTML(){return `
+    <div class="sf-auth-backdrop" id="sf-auth"><div class="sf-auth-card">
+      <h2>Secure Coding: Basic to Intermediate</h2>
+      <p class="sf-auth-sub">Sign in with your SourceFuse Google account to access the course and save your progress.</p>
+      <button class="sf-btn" id="sf-google" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.35 11.1H12v3.2h5.35c-.5 2.5-2.6 3.9-5.35 3.9a6.2 6.2 0 1 1 4.1-10.85l2.4-2.4A9.6 9.6 0 1 0 12 21.6c5 0 9.6-3.6 9.6-9.6 0-.3 0-.6-.05-.9z"/></svg> Sign in with Google</button>
+      <div class="sf-or">OR</div>
+      <input class="sf-inp" id="sf-email" type="email" placeholder="you@sourcefuse.com" autocomplete="username">
+      <input class="sf-inp" id="sf-pass" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="sf-btn" id="sf-email-btn" type="button">Sign in with email</button>
+      <div class="sf-err" id="sf-err"></div>
+      ${IN_FRAME ? '<p class="sf-frame">If the Google sign-in window does not open, <a href="' + location.href + '" target="_blank" rel="noopener">open the course in a new tab</a>, or use Sign in with email.</p>' : ''}
+    </div></div>`;}
+
+  function fail(m){ const e = document.getElementById("sf-err"); if (e) e.textContent = m; }
+  function validDomain(x){
+    if (typeof x !== "string") return false;
+    return x.toLowerCase().endsWith("@" + ALLOWED_DOMAIN);
+  }
+  /* Same check as the SF Knowledge Hub: this course's nominations document
+     for the email exists and is not marked nominated: false. */
+  async function isNominated(x){
+    if (typeof x !== "string") return false;
+    if (ADMINS.indexOf(x.toLowerCase()) !== -1) return true;
+    if (!readNomination) return false;
+    try {
+      const s = await readNomination(x.toLowerCase());
+      return s.exists() && s.data().nominated !== false;
+    } catch (e) {
+      console.log("[auth] nomination read failed:", e && e.message);
+      return false;
+    }
+  }
+  function showNotNominated(){
+    const card = document.getElementById("sf-auth");
+    if (!card) return;
+    card.style.display = "flex";
+    card.innerHTML = '<div class="sf-auth-card">'
+      + '<div class="sf-auth-badge">SF Knowledge Hub</div>'
+      + '<h2>You are not nominated to this course</h2>'
+      + '</div>';
+  }
+  function proceed(user){
+    const el = document.getElementById("sf-auth"); if (el) el.remove();
+    if (readyCb) readyCb(user, signOutFn);
+  }
+
+  function wireSignin(){
+    document.getElementById("sf-google").addEventListener("click", async () => {
+      fail("");
+      if (!signInPopup) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const p = new GoogleProvider();
+      p.setCustomParameters({ hd: ALLOWED_DOMAIN });
+      try {
+        const r = await signInPopup(p);
+        const u = r && r.user;
+        const email = (u && u.email) || "";
+        if (!validDomain(email)) {
+          await signOutFn();
+          return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+        }
+        if (!(await isNominated(email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithPopup failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/popup-blocked")
+          return fail(IN_FRAME
+            ? "The sign-in window was blocked here. Open the course in a new tab using the link below, or use Sign in with email."
+            : "Your browser blocked the sign-in window. Allow pop-ups for this site, then try again.");
+        if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request")
+          return fail("Sign-in was closed before it finished. Try again.");
+        fail("Google sign-in couldn't complete. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+    document.getElementById("sf-email-btn").addEventListener("click", async () => {
+      fail("");
+      if (!signInEmail) return fail("Sign-in is still loading. Wait a moment and try again.");
+      const email = (document.getElementById("sf-email").value || "").trim().toLowerCase();
+      const pass  = document.getElementById("sf-pass").value || "";
+      if (!email || !pass) return fail("Enter your email and password.");
+      if (!validDomain(email)) return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      try {
+        const r = await signInEmail(email, pass);
+        const u = r && r.user;
+        if (!(await isNominated((u && u.email) || email))) return showNotNominated();
+        return proceed(u);
+      } catch (e) {
+        const code = e && e.code;
+        console.log("[auth] signInWithEmailAndPassword failed; code:", code, "| message:", e && e.message);
+        if (code === "auth/invalid-credential" || code === "auth/wrong-password" || code === "auth/user-not-found")
+          return fail("Incorrect email or password.");
+        fail("Sign-in failed. Try again, or contact the SF Knowledge Hub admin.");
+      }
+    });
+  }
+
+  async function mount(onReady){
+    readyCb = onReady;
+    document.head.insertAdjacentHTML("beforeend", styleTag());
+    document.body.insertAdjacentHTML("beforeend", signinHTML());
+    /* Hidden until onAuth reports no session. A signed-in nominated user
+       goes straight through without the overlay appearing at all. */
+    const authCard = document.getElementById("sf-auth");
+    if (authCard) authCard.style.display = "none";
+    try { await initFirebase(); }
+    catch (e) {
+      console.log("[auth] init failed:", e && e.message);
+      if (authCard) authCard.style.display = "flex";
+      fail("Sign-in service didn't load. Reload the page.");
+      return;
+    }
+    if (onAuth) onAuth(async (u) => {
+      if (!u) {
+        if (authCard) authCard.style.display = "flex";
+        return;
+      }
+      if (!validDomain(u.email)) {
+        await signOutFn();
+        if (authCard) authCard.style.display = "flex";
+        return fail("Sign in with your @" + ALLOWED_DOMAIN + " account.");
+      }
+      /* Signed in and on-domain, but not on the list. Do not sign them out
+         automatically: the session is shared with the SF Knowledge Hub and
+         dropping it would sign them out of the Hub too. */
+      if (!(await isNominated(u.email))) return showNotNominated();
+      proceed(u);
+    });
+    wireSignin();
+  }
+
+  window.SFAuth = { mount: mount };
+})();
+</script>
+
+<!-- Progress: localStorage written first, Firestore synced after. -->
+<script type="module">
+(function(){
+  /* `courses` document id for this course. Same value in every file of this course. */
+  var CP_COURSE_ID = "__SC1_COURSE_ID__";   /* set to the courses document id after deployment */
+
+  var MODULE_KEYS = ["sc1-m0", "sc1-m1", "sc1-m2", "sc1-m3", "sc1-m4", "sc1-m5", "sc1-m6"];
+  var SECTION_TOTALS = {"sc1-m0": 4, "sc1-m1": 4, "sc1-m2": 4, "sc1-m3": 4, "sc1-m4": 4, "sc1-m5": 4, "sc1-m6": 4};   /* sections per module */
+  var FB = "https://www.gstatic.com/firebasejs/10.12.2/";
+  var LS  = "sf-sc1:";                       /* module completion, final test summary */
+  var LSS = "sf-sc1-sec:";                   /* section ticks */
+  var GK  = "sf-sc1-gate:";                  /* check-question gate */
+
+  var fs = null, db = null, cpRef = null, prRef = null, erRef = null,
+      user = null, courseObj = {}, examObj = null, ready = false;
+
+  function stamp(){
+    var p = function(n){ return String(n).padStart(2,"0"); };
+    var d = new Date();
+    return { date: d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()),
+             time: p(d.getHours())+":"+p(d.getMinutes())+":"+p(d.getSeconds()) };
+  }
+  /* Legacy progress/{uid} field for a module: sc1-m1 -> sc1_m1 */
+  function secField(mk){ return mk.replace(/-/g, "_"); }
+
+  /* ---- localStorage layer ---------------------------------------------- */
+  function jRead(k){ try { return JSON.parse(localStorage.getItem(k) || "{}"); } catch(_) { return {}; } }
+  function jWrite(k, o){ try { localStorage.setItem(k, JSON.stringify(o)); } catch(_) {} }
+  function lsRead(){ return jRead(LS + user.uid); }
+  function lsWrite(o){ jWrite(LS + user.uid, o); }
+  function secRead(){ return jRead(LSS + user.uid); }
+  function secWrite(o){ jWrite(LSS + user.uid, o); }
+
+  function state(){
+    var o = lsRead();
+    return { modules: o.modules || {}, exam: o.exam || null, sections: secRead() };
+  }
+  function lsSetModule(mk, done){
+    var o = lsRead();
+    o.modules = o.modules || {};
+    if (done) { var t = stamp(); o.modules[mk] = { completedOn: t.date, completedAt: t.time }; }
+    else delete o.modules[mk];
+    lsWrite(o);
+    return state();
+  }
+  function isDone(st, mk){
+    var m = (st && st.modules || {})[mk];
+    return !!(m && m.completedOn);
+  }
+  function sectionsDone(st, mk){
+    var a = ((st && st.sections) || {})[mk] || [];
+    return a.length;
+  }
+
+  /* ---- Firestore layer --------------------------------------------------- */
+  function base(){ return { email: user.email, name: user.displayName || user.email, courses: {} }; }
+
+  function setModuleInProgress(mk){
+    if (!ready || !mk) return Promise.resolve();
+    if (courseObj.courseCompletedOn) return Promise.resolve();
+    if (isDone(courseObj, mk)) return Promise.resolve();
+    var needStart = !courseObj.courseStartedOn;
+    if (courseObj.moduleInProgress === mk && !needStart) return Promise.resolve();
+    var t = stamp();
+    var cu = { moduleInProgress: mk };
+    if (needStart) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+    var update = base(); update.courses[CP_COURSE_ID] = cu;
+    courseObj.moduleInProgress = mk;
+    if (needStart) courseObj.courseStartedOn = t.date;
+    return fs.setDoc(cpRef, update, { merge: true })
+      .catch(function(e){ console.error("[progress] moduleInProgress write failed", e); });
+  }
+
+  /* Read-then-merge completion write. */
+  function completeModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    var t = stamp();
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      if (!obj.courseStartedOn) { cu.courseStartedOn = t.date; cu.courseStartedAt = t.time; }
+      if (!(existing[mk] && existing[mk].completedOn)) cu.modules[mk] = { completedOn: t.date, completedAt: t.time };
+      var doneAfter = function(k){ return !!((existing[k] && existing[k].completedOn) || cu.modules[k]); };
+      if (MODULE_KEYS.every(doneAfter)) {
+        if (!obj.courseCompletedOn) { cu.courseCompletedOn = t.date; cu.courseCompletedAt = t.time; }
+        cu.moduleInProgress = null;
+      } else {
+        var next = null;
+        for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+        cu.moduleInProgress = next;
+      }
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      courseObj = Object.assign({}, obj, cu, { modules: Object.assign({}, existing, cu.modules) });
+      return fs.setDoc(cpRef, update, { merge: true });
+    });
+  }
+
+  /* Section tick: localStorage first, then progress/{uid}.sc1_mN (arrayUnion). */
+  function tickSection(mk, n){
+    var s = secRead();
+    var a = s[mk] || [];
+    if (a.indexOf(n) === -1) { a.push(n); a.sort(function(x,y){ return x-y; }); }
+    s[mk] = a; secWrite(s);
+    if (!ready) return Promise.reject(new Error("offline"));
+    var upd = {}; upd[secField(mk)] = fs.arrayUnion(n);
+    return fs.setDoc(prRef, upd, { merge: true });
+  }
+
+  /* Final test attempt: one attempt document in courseExamResults + best-attempt summary in examResults. */
+  function recordExam(r){
+    var t = stamp();
+    var o = lsRead();
+    var prev = o.exam || {};
+    var attempts = Math.max(prev.attempts || 0, (examObj && examObj.attempts) || 0, r.attemptNumber);
+    var bestPassed = !!(prev.passed || (examObj && examObj.passed) || r.pass);
+    var bestPct = Math.max(prev.score || 0, (examObj && examObj.score) || 0, r.pct);
+    o.exam = { attempts: attempts, passed: bestPassed, score: bestPct, lastPct: r.pct, lastPass: r.pass,
+               submittedOn: t.date, submittedAt: t.time };
+    lsWrite(o);
+    if (!ready) return Promise.reject(new Error("offline"));
+
+    var attemptId = t.date + "_" + t.time.replace(/:/g, "");
+    var aRef = fs.doc(db, "courseExamResults", user.email, "courses", CP_COURSE_ID, "attempts", attemptId);
+    var body = {
+      email: user.email, name: user.displayName || user.email, courseId: CP_COURSE_ID,
+      attemptNumber: r.attemptNumber, correct: r.correct, total: r.total, pct: r.pct, pass: r.pass,
+      submittedAt: new Date().toISOString(), durationSeconds: r.durationSeconds, timeUp: r.timeUp,
+      detail: r.detail
+    };
+    return fs.setDoc(aRef, body).then(function(){
+      return fs.getDoc(erRef);
+    }).then(function(snap){
+      var cur = (snap.exists() ? (snap.data() || {})[CP_COURSE_ID] : null) || {};
+      var better = !cur.passed && (r.pass || (r.pct >= (cur.score || 0)));
+      var summary = {
+        attempts: Math.max((cur.attempts || 0) + 1, r.attemptNumber),
+        correct: better ? r.correct : cur.correct,
+        total: better ? r.total : cur.total,
+        score: better ? r.pct : cur.score,
+        passed: !!(cur.passed || r.pass),
+        timeTaken: better ? r.durationSeconds : cur.timeTaken,
+        timedOut: better ? r.timeUp : cur.timedOut,
+        submittedAt: better ? new Date().toISOString() : cur.submittedAt
+      };
+      examObj = summary;
+      var upd = { learnerEmail: user.email, learnerName: user.displayName || user.email };
+      upd[CP_COURSE_ID] = summary;
+      return fs.setDoc(erRef, upd, { merge: true });
+    });
+  }
+
+  /* ---- Boot ------------------------------------------------------------ */
+  async function start(u, moduleKey, onState){
+    user = u;
+    var local = state();
+    onState(local, false);                       /* paint from localStorage at once */
+    try {
+      var appMod  = await import(FB + "firebase-app.js");
+      fs          = await import(FB + "firebase-firestore.js");
+      var app = appMod.getApp();                 /* DEFAULT app, never a named one */
+      db    = fs.getFirestore(app);
+      cpRef = fs.doc(db, "courseProgress", user.uid);
+      prRef = fs.doc(db, "progress", user.uid);
+      erRef = fs.doc(db, "examResults", user.uid);
+
+      var cs = await fs.getDoc(cpRef);
+      if (cs.exists()) courseObj = ((cs.data() || {}).courses || {})[CP_COURSE_ID] || {};
+      var remoteSec = {};
+      try {
+        var ps = await fs.getDoc(prRef);
+        var pd = ps.exists() ? (ps.data() || {}) : {};
+        MODULE_KEYS.forEach(function(k){ if (Array.isArray(pd[secField(k)])) remoteSec[k] = pd[secField(k)]; });
+      } catch(e){ console.error("[progress] section read failed", e); }
+      try {
+        var es = await fs.getDoc(erRef);
+        examObj = es.exists() ? ((es.data() || {})[CP_COURSE_ID] || null) : null;
+      } catch(e){ console.error("[progress] exam read failed", e); }
+      ready = true;
+
+      /* Merge: anything complete in either store stays complete. */
+      var o = lsRead();
+      o.modules = Object.assign({}, local.modules || {}, courseObj.modules || {});
+      if (examObj) {
+        var le = o.exam || {};
+        o.exam = { attempts: Math.max(le.attempts || 0, examObj.attempts || 0),
+                   passed: !!(le.passed || examObj.passed),
+                   score: Math.max(le.score || 0, examObj.score || 0),
+                   lastPct: le.lastPct, lastPass: le.lastPass,
+                   submittedOn: le.submittedOn, submittedAt: le.submittedAt };
+      }
+      lsWrite(o);
+      var sLocal = secRead(), pushSec = [];
+      MODULE_KEYS.forEach(function(k){
+        var a = (sLocal[k] || []).slice();
+        (remoteSec[k] || []).forEach(function(n){ if (a.indexOf(n) === -1) a.push(n); });
+        (sLocal[k] || []).forEach(function(n){ if ((remoteSec[k] || []).indexOf(n) === -1) pushSec.push([k, n]); });
+        if (a.length) { a.sort(function(x,y){ return x-y; }); sLocal[k] = a; }
+      });
+      secWrite(sLocal);
+      onState(state(), true);
+
+      /* Push anything localStorage had that Firestore did not. */
+      var pending = Object.keys(local.modules || {}).filter(function(k){ return !isDone(courseObj, k); });
+      for (var i = 0; i < pending.length; i++) {
+        try { await completeModule(pending[i]); } catch(e){ console.error("[progress] backfill failed", e); }
+      }
+      for (var j = 0; j < pushSec.length; j++) {
+        try { var upd = {}; upd[secField(pushSec[j][0])] = fs.arrayUnion(pushSec[j][1]); await fs.setDoc(prRef, upd, { merge: true }); }
+        catch(e){ console.error("[progress] section backfill failed", e); }
+      }
+      await setModuleInProgress(moduleKey);
+    } catch(e) {
+      console.error("[progress] Firestore unavailable, localStorage only:", e);
+      onState(state(), false);
+    }
+  }
+
+  /* ---- Redo -----------------------------------------------------------
+     Clears one module: completion, section ticks and check-question answers,
+     on this device and in Firestore. Final test attempts are records
+     and are left untouched.                                               */
+  function clearLocalModule(mk){
+    var o = lsRead(); if (o.modules) delete o.modules[mk]; lsWrite(o);
+    var s = secRead(); delete s[mk]; secWrite(s);
+    var g = jRead(GK + user.uid); delete g[mk]; jWrite(GK + user.uid, g);
+    return state();
+  }
+  function redoModule(mk){
+    if (!ready) return Promise.reject(new Error("offline"));
+    return fs.getDoc(cpRef).then(function(snap){
+      var data = snap.exists() ? (snap.data() || {}) : {};
+      var obj  = (data.courses || {})[CP_COURSE_ID] || {};
+      var existing = obj.modules || {};
+      var cu = { modules: {} };
+      cu.modules[mk] = fs.deleteField();
+      if (obj.courseCompletedOn) { cu.courseCompletedOn = fs.deleteField(); cu.courseCompletedAt = fs.deleteField(); }
+      var doneAfter = function(k){ return k !== mk && !!(existing[k] && existing[k].completedOn); };
+      var next = null;
+      for (var i = 0; i < MODULE_KEYS.length; i++) { if (!doneAfter(MODULE_KEYS[i])) { next = MODULE_KEYS[i]; break; } }
+      cu.moduleInProgress = next;
+      var update = base(); update.courses[CP_COURSE_ID] = cu;
+      var fresh = Object.assign({}, existing); delete fresh[mk];
+      courseObj = Object.assign({}, obj, { modules: fresh, moduleInProgress: next });
+      delete courseObj.courseCompletedOn; delete courseObj.courseCompletedAt;
+      var pr = {}; pr[secField(mk)] = fs.deleteField();
+      return Promise.all([fs.setDoc(cpRef, update, { merge: true }), fs.setDoc(prRef, pr, { merge: true })]);
+    });
+  }
+
+  window.SFProgress = {
+    start: start,
+    redo: redoModule,
+    clearLocalModule: clearLocalModule,
+    moduleKeys: MODULE_KEYS,
+    sectionTotals: SECTION_TOTALS,
+    isDone: isDone,
+    sectionsDone: sectionsDone,
+    read: function(){ return user ? state() : {}; },
+    setLocal: function(mk, done){ return lsSetModule(mk, done); },
+    sync: function(mk, done){
+      if (!ready) return Promise.reject(new Error("offline"));
+      return done ? completeModule(mk) : Promise.resolve();
+    },
+    tickSection: tickSection,
+    recordExam: recordExam,
+    examRemote: function(){ return examObj; },
+    isReady: function(){ return ready; },
+    gateKey: GK,
+    courseId: function(){ return CP_COURSE_ID; }
+  };
+})();
+</script>
+
+<script type="module">
+(function(){
+  var MK = "sc1-m6";
+  var PASS_PCT = 70;   /* module check: share of questions that must be right */
+  var NSEC = 4;
+  var GATE = [{"answer": 3, "why": "Revision 4 requires at least 15 characters for a password used on its own, and at least 8 when it is used with multi-factor authentication."}, {"answer": 2, "why": "Composition rules lead to predictable passwords such as Password1!. Length and breached-password checks work better."}, {"answer": 1, "why": "If the ID stays the same, an attacker who planted it can use it once the user signs in. A new ID makes the planted one worthless."}, {"answer": 2, "why": "HttpOnly hides the cookie from JavaScript. Secure sends it only over HTTPS, and SameSite limits when other sites can send it."}, {"answer": 1, "why": "Different messages let attackers build a list of real accounts to target. Use one message, such as \"Email or password is incorrect\"."}];
+  var P = window.SFProgress;
+  var KEYS = P.moduleKeys;
+
+  function gateRead(uid){ try { return JSON.parse(localStorage.getItem(P.gateKey + uid) || "{}"); } catch(_) { return {}; } }
+  function gateWrite(uid, o){ try { localStorage.setItem(P.gateKey + uid, JSON.stringify(o)); } catch(_) {} }
+
+  document.querySelectorAll('.langbar button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var open = b.getAttribute('data-lang') === 'open';
+      var scope = b.closest('.stage-body') || document;
+      scope.querySelectorAll('details.lang').forEach(function(d){ d.open = open; });
+    });
+  });
+
+  window.SFAuth.mount(async function(user, signOut){
+    document.getElementById('who').innerHTML =
+      (user.email || '') + ' <button class="signout" id="signout">Sign out</button>';
+    var so = document.getElementById('signout');
+    if (so && signOut) so.onclick = function(){ signOut().then(function(){ location.reload(); }); };
+
+    var box = document.getElementById('cmplt'), lbl = document.getElementById('lbl'),
+        sync = document.getElementById('sync'), nextbtn = document.getElementById('nextbtn'),
+        gcheck = document.getElementById('gcheck'), gstate = document.getElementById('gstate');
+    var gatePassed = false;
+
+    function showGateSatisfied(){
+      gatePassed = true;
+      GATE.forEach(function(gq, i){
+        var rs = document.querySelectorAll('input[name="g' + i + '"]');
+        if (rs[gq.answer]) rs[gq.answer].checked = true;
+        var fb = document.getElementById('gfb-' + i);
+        if (fb) fb.innerHTML = '<div class="callout good"><span class="tag">Correct</span><p>' + gq.why + '</p></div>';
+      });
+      document.querySelectorAll('.gq input[type=radio]').forEach(function(r){ r.disabled = true; });
+      if (gcheck) gcheck.style.display = 'none';
+      gstate.textContent = 'Check questions passed';
+    }
+
+    gcheck.addEventListener('click', function(){
+      var nRight = 0, unanswered = 0;
+      var need = Math.ceil(GATE.length * PASS_PCT / 100);
+      GATE.forEach(function(gq, i){
+        var sel = document.querySelector('input[name="g' + i + '"]:checked');
+        var fb  = document.getElementById('gfb-' + i);
+        if (!sel) { unanswered++; fb.innerHTML = ''; return; }
+        var ok = parseInt(sel.value, 10) === gq.answer;
+        if (ok) nRight++;
+        fb.innerHTML = ok
+          ? '<div class="callout good"><span class="tag">Correct</span><p>' + gq.why + '</p></div>'
+          : '<div class="callout caution"><span class="tag">Not quite</span><p>Look at the module again and try once more.</p></div>';
+      });
+      if (unanswered) { gstate.textContent = 'Answer every question first.'; return; }
+      if (nRight < need) { gstate.textContent = nRight + ' of ' + GATE.length + ' correct. You need ' + need + '. Try again.'; return; }
+      var gs = gateRead(user.uid); gs[MK] = true; gateWrite(user.uid, gs);
+      showGateSatisfied();
+      paint(P.read());
+    });
+
+    document.querySelectorAll('input.sec').forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if (!cb.checked) return;
+        var n = parseInt(cb.getAttribute('data-sec'), 10);
+        var pr = P.tickSection(MK, n);
+        paint(P.read());
+        pr.catch(function(e){
+          console.error('[progress] section sync failed', e);
+          sync.textContent = 'Saved on this device. It will sync to your SF record next time you open this page online.';
+        });
+      });
+    });
+
+    function paint(state){
+      var ticks = (state.sections || {})[MK] || [];
+      for (var i = 1; i <= NSEC; i++) {
+        var cb = document.querySelector('input.sec[data-sec="' + i + '"]');
+        var on = ticks.indexOf(i) !== -1;
+        cb.checked = on; cb.disabled = on;
+        document.getElementById('sd-' + i).classList.toggle('ticked', on);
+        document.getElementById('num-' + i).classList.toggle('ok', on);
+      }
+      var nDone = KEYS.filter(function(k){ return P.isDone(state, k); }).length;
+      var secCount = Math.min(ticks.length, NSEC);
+      document.getElementById('fill').style.width = (secCount / NSEC) * 100 + '%';
+      document.getElementById('count').textContent = 'This module: ' + secCount + ' of ' + NSEC
+        + ' sections \u00b7 Course: ' + nDone + ' of ' + KEYS.length + ' modules complete';
+
+      var done = P.isDone(state, MK);
+      if (!gatePassed && (done || gateRead(user.uid)[MK])) showGateSatisfied();
+      if (done) {
+        var m = (state.modules || {})[MK] || {};
+        box.checked = true; box.disabled = true;
+        lbl.classList.add('checked'); lbl.classList.remove('locked');
+        sync.textContent = 'Completed on ' + (m.completedOn || '') + (m.completedAt ? ' at ' + m.completedAt : '');
+        nextbtn.classList.remove('off');
+        return;
+      }
+      nextbtn.classList.add('off');
+      box.checked = false;
+      var allSec = secCount >= NSEC;
+      box.disabled = !(allSec && gatePassed);
+      lbl.classList.toggle('locked', box.disabled);
+      if (!allSec && !gatePassed) sync.textContent = 'To unlock: finish every section and pass the check questions.';
+      else if (!allSec) sync.textContent = 'To unlock: tick the finish box at the end of every section.';
+      else if (!gatePassed) sync.textContent = 'To unlock: pass the check questions above.';
+      else sync.textContent = '';
+    }
+
+    await P.start(user, MK, function(state){ paint(state); });
+
+    box.addEventListener('change', async function(){
+      if (!box.checked) return;
+      var state = P.setLocal(MK, true);          /* localStorage first */
+      paint(state);
+      sync.textContent = 'Saved on this device. Syncing\u2026';
+      try {
+        await P.sync(MK, true);
+        var m = (state.modules || {})[MK] || {};
+        sync.textContent = 'Completed on ' + (m.completedOn || '') + ' \u00b7 saved to your SF record';
+      } catch(e) {
+        console.error('[progress] sync failed', e);
+        sync.textContent = 'Saved on this device. It will sync to your SF record next time you open this page online.';
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
